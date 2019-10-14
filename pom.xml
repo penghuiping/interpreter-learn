@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.php25</groupId>
-	<artifactId>compiler-learn</artifactId>
+	<artifactId>interpreter-learn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>compiler-learn</name>
+	<name>interpreter-learn</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.php25.compilerlearn.util;
+package com.php25.interpreterlearn.util;
 
 
 import java.util.Collection;

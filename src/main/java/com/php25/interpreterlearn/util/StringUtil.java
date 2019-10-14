@@ -1,4 +1,4 @@
-package com.php25.compilerlearn.util;
+package com.php25.interpreterlearn.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

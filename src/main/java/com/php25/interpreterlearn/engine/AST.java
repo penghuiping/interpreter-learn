@@ -1,7 +1,7 @@
-package com.php25.compilerlearn.engine;
+package com.php25.interpreterlearn.engine;
 
-import com.php25.compilerlearn.bo.Token;
-import com.php25.compilerlearn.bo.ExpressionNode;
+import com.php25.interpreterlearn.bo.Token;
+import com.php25.interpreterlearn.bo.ExpressionNode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public class AST {
                         previousNode.setRight(node);
                         node.setParent(previousNode);
                         break;
-                    case label:
+                    case term:
                         previousNode.setRight(node);
                         node.setParent(previousNode);
                         break;

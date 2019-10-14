@@ -1,7 +1,7 @@
-package com.php25.compilerlearn.engine;
+package com.php25.interpreterlearn.engine;
 
-import com.php25.compilerlearn.bo.Token;
-import com.php25.compilerlearn.constant.TokenType;
+import com.php25.interpreterlearn.bo.Token;
+import com.php25.interpreterlearn.constant.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class Grammar {
         List<Token> newTokens = new ArrayList<>();
 
         Token token0 = tokens.get(position++);
-        if (token0.getType() == TokenType.label || isData(token0.getType())) {
+        if (token0.getType() == TokenType.term || isData(token0.getType())) {
             newTokens.add(token0);
         } else {
             return null;
@@ -48,7 +48,7 @@ public class Grammar {
             }
 
             Token token2 = tokens.get(position++);
-            if (token2.getType() == TokenType.label || isData(token2.getType())) {
+            if (token2.getType() == TokenType.term || isData(token2.getType())) {
 
             } else {
                 return newTokens.size() >= 3 ? newTokens : null;

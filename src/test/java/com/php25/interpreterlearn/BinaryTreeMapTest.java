@@ -1,4 +1,4 @@
-package com.php25.compilerlearn;
+package com.php25.interpreterlearn;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

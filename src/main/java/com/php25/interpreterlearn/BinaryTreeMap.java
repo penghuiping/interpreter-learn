@@ -1,4 +1,4 @@
-package com.php25.compilerlearn;
+package com.php25.interpreterlearn;
 
 /**
  * @author penghuiping

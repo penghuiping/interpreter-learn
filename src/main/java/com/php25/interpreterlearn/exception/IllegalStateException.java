@@ -1,4 +1,4 @@
-package com.php25.compilerlearn.exception;
+package com.php25.interpreterlearn.exception;
 
 /**
  * @author: penghuiping

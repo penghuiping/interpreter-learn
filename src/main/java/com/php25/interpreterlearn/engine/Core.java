@@ -1,6 +1,6 @@
-package com.php25.compilerlearn.engine;
+package com.php25.interpreterlearn.engine;
 
-import com.php25.compilerlearn.exception.Exceptions;
+import com.php25.interpreterlearn.exception.Exceptions;
 
 /**
  * @author penghuiping

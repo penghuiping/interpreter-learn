@@ -1,4 +1,4 @@
-package com.php25.compilerlearn.constant;
+package com.php25.interpreterlearn.constant;
 
 /**
  * @author penghuiping
