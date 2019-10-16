@@ -1,8 +1,5 @@
-package com.php25.interpreterlearn.engine;
+package com.php25.interpreterlearn.lexer;
 
-import com.php25.interpreterlearn.bo.Position;
-import com.php25.interpreterlearn.bo.Token;
-import com.php25.interpreterlearn.constant.TokenType;
 import com.php25.interpreterlearn.exception.Exceptions;
 
 import java.util.ArrayList;
@@ -73,11 +70,30 @@ public class Lexer {
                     tokenValue = tokenValue.replace("\"", "");
                     Token token = new Token(tokenValue, TokenType.string, new Position(row, col));
                     result.add(token);
-
-                } else if (cv == '+' || cv == '-' || cv == '*' || cv == '/' || cv == '%') {
+                } else if (cv == '+') {
                     //基本运算符
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.operator, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.plus, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == '-') {
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.minus, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == '*') {
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.mul, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == '/') {
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.div, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == '%') {
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.mod, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '&' || cv == '=' || cv == '|' || cv == '!' || cv == '>' || cv == '<') {

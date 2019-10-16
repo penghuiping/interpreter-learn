@@ -1,8 +1,8 @@
 package com.php25.interpreterlearn;
 
-import com.php25.interpreterlearn.bo.Token;
-import com.php25.interpreterlearn.constant.TokenType;
-import com.php25.interpreterlearn.engine.Lexer;
+import com.php25.interpreterlearn.lexer.Token;
+import com.php25.interpreterlearn.lexer.TokenType;
+import com.php25.interpreterlearn.lexer.Lexer;
 import com.php25.interpreterlearn.exception.IllegalStateException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -83,15 +83,15 @@ public class LexerTest {
     public void operator() {
         List<Token> tokenList = Lexer.parse("1231+123-111*12/12%3");
         Assert.assertSame(tokenList.get(0).getType(), TokenType.digit);
-        Assert.assertSame(tokenList.get(1).getType(), TokenType.operator);
+        Assert.assertSame(tokenList.get(1).getType(), TokenType.plus);
         Assert.assertSame(tokenList.get(2).getType(), TokenType.digit);
-        Assert.assertSame(tokenList.get(3).getType(), TokenType.operator);
+        Assert.assertSame(tokenList.get(3).getType(), TokenType.minus);
         Assert.assertSame(tokenList.get(4).getType(), TokenType.digit);
-        Assert.assertSame(tokenList.get(5).getType(), TokenType.operator);
+        Assert.assertSame(tokenList.get(5).getType(), TokenType.mul);
         Assert.assertSame(tokenList.get(6).getType(), TokenType.digit);
-        Assert.assertSame(tokenList.get(7).getType(), TokenType.operator);
+        Assert.assertSame(tokenList.get(7).getType(), TokenType.div);
         Assert.assertSame(tokenList.get(8).getType(), TokenType.digit);
-        Assert.assertSame(tokenList.get(9).getType(), TokenType.operator);
+        Assert.assertSame(tokenList.get(9).getType(), TokenType.mod);
         Assert.assertSame(tokenList.get(10).getType(), TokenType.digit);
 
 

@@ -1,7 +1,8 @@
 package com.php25.interpreterlearn.engine;
 
-import com.php25.interpreterlearn.bo.Token;
+import com.php25.interpreterlearn.lexer.Token;
 import com.php25.interpreterlearn.exception.Exceptions;
+import com.php25.interpreterlearn.lexer.Tokens;
 
 import java.util.ArrayList;
 import java.util.List;

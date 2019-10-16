@@ -1,9 +1,4 @@
-package com.php25.interpreterlearn.engine;
-
-import com.php25.interpreterlearn.bo.Token;
-import com.php25.interpreterlearn.constant.TokenType;
-
-import java.util.List;
+package com.php25.interpreterlearn.lexer;
 
 /**
  * @author penghuiping
@@ -54,20 +49,37 @@ public class Tokens {
     }
 
     public static boolean isOperator(Token token) {
-        if (token.getType() == TokenType.operator) {
+        if (token.getType() == TokenType.plus
+                || token.getType() == TokenType.minus
+                || token.getType() == TokenType.mul
+                || token.getType() == TokenType.div
+                || token.getType() == TokenType.mod
+        ) {
             return true;
         } else {
             return false;
         }
     }
 
-
-
-    public static void print(List<Token> tokens) {
-        for (Token token : tokens) {
-            System.out.print(token.getValue());
-        }
-        System.out.println();
+    public static boolean isPlus(Token token) {
+        return token.getType() == TokenType.plus;
     }
+
+    public static boolean isMinus(Token token) {
+        return token.getType() == TokenType.minus;
+    }
+
+    public static boolean isMul(Token token) {
+        return token.getType() == TokenType.mul;
+    }
+
+    public static boolean isDiv(Token token) {
+        return token.getType() == TokenType.div;
+    }
+
+    public static boolean isMod(Token token) {
+        return token.getType() == TokenType.mod;
+    }
+
 
 }

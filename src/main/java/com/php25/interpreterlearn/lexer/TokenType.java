@@ -1,4 +1,4 @@
-package com.php25.interpreterlearn.constant;
+package com.php25.interpreterlearn.lexer;
 
 /**
  * @author penghuiping
@@ -6,9 +6,30 @@ package com.php25.interpreterlearn.constant;
  */
 public enum TokenType {
     /**
-     * 操作符 +,-,*,/,%,
+     * 操作符 +
      */
-    operator,
+    plus,
+
+    /**
+     * 操作符 -
+     */
+    minus,
+
+    /**
+     * 操作符 *
+     */
+    mul,
+
+    /**
+     * 操作符 /
+     */
+    div,
+
+    /**
+     * 操作符 %
+     */
+    mod,
+
 
     /**
      * 赋值 =

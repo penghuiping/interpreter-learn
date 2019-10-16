@@ -1,6 +1,6 @@
 package com.php25.interpreterlearn.ast;
 
-import com.php25.interpreterlearn.bo.Token;
+import com.php25.interpreterlearn.lexer.Token;
 import lombok.Getter;
 import lombok.Setter;
 

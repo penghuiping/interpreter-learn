@@ -1,4 +1,4 @@
-package com.php25.interpreterlearn.engine;
+package com.php25.interpreterlearn.runtime;
 
 import com.php25.interpreterlearn.ast.AST;
 import com.php25.interpreterlearn.ast.BinOp;
@@ -11,26 +11,26 @@ import com.php25.interpreterlearn.exception.Exceptions;
  */
 public class Interpreter {
 
-    public Integer visit(AST ast_) {
-        if (ast_ instanceof BinOp) {
-            return visitBinOp(ast_);
-        } else if (ast_ instanceof Digit) {
-            return visitNum(ast_);
+    public Integer visit(AST ast) {
+        if (ast instanceof BinOp) {
+            return visitBinOp(ast);
+        } else if (ast instanceof Digit) {
+            return visitDigit(ast);
         } else {
             throw Exceptions.throwIllegalStateException("不支持此类型的AST");
         }
     }
 
 
-    private Integer visitBinOp(AST ast_) {
-        BinOp binOp = (BinOp) ast_;
+    private Integer visitBinOp(AST ast) {
+        BinOp binOp = (BinOp) ast;
         AST left = binOp.getLeft();
         AST right = binOp.getRight();
         return Core.express(binOp.getOp().getValue(), visit(left), visit(right));
     }
 
-    private Integer visitNum(AST ast_) {
-        Digit digit = (Digit) ast_;
+    private Integer visitDigit(AST ast) {
+        Digit digit = (Digit) ast;
         return Integer.parseInt(digit.getToken().getValue());
     }
 

@@ -1,4 +1,4 @@
-package com.php25.interpreterlearn.bo;
+package com.php25.interpreterlearn.lexer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

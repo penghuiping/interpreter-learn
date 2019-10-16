@@ -1,6 +1,5 @@
-package com.php25.interpreterlearn.bo;
+package com.php25.interpreterlearn.lexer;
 
-import com.php25.interpreterlearn.constant.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

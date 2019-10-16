@@ -1,8 +1,8 @@
 package com.php25.interpreterlearn;
 
-import com.php25.interpreterlearn.bo.Token;
+import com.php25.interpreterlearn.lexer.Token;
 import com.php25.interpreterlearn.engine.Grammar;
-import com.php25.interpreterlearn.engine.Lexer;
+import com.php25.interpreterlearn.lexer.Lexer;
 import com.php25.interpreterlearn.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

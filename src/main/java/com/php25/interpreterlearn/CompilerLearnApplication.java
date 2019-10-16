@@ -1,7 +1,7 @@
 package com.php25.interpreterlearn;
 
-import com.php25.interpreterlearn.bo.Token;
-import com.php25.interpreterlearn.engine.Lexer;
+import com.php25.interpreterlearn.lexer.Token;
+import com.php25.interpreterlearn.lexer.Lexer;
 import com.php25.interpreterlearn.util.JsonUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

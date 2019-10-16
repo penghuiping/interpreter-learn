@@ -1,8 +1,8 @@
 package com.php25.interpreterlearn.ast;
 
-import com.php25.interpreterlearn.bo.Token;
-import com.php25.interpreterlearn.constant.TokenType;
-import com.php25.interpreterlearn.engine.Tokens;
+import com.php25.interpreterlearn.lexer.Token;
+import com.php25.interpreterlearn.lexer.TokenType;
+import com.php25.interpreterlearn.lexer.Tokens;
 import com.php25.interpreterlearn.exception.Exceptions;
 
 import java.util.List;
@@ -45,14 +45,17 @@ public class ASTParser {
      */
     public AST term() {
         AST node = this.factor();
-
         Token token = getCurrentToken();
 
         //注意这里是用while 应为((MUL | DIV) factor)*表没有或者多个
-        while (Tokens.isOperator(token) && "*".equals(token.getValue())
-                || Tokens.isOperator(token) && "/".equals(token.getValue())
+        while (Tokens.isMul(token)
+                || Tokens.isDiv(token)
         ) {
-            this.eat(TokenType.operator);
+            if (Tokens.isMul(token)) {
+                this.eat(TokenType.mul);
+            } else {
+                this.eat(TokenType.div);
+            }
             node = new BinOp(node, token, this.factor());
             token = getCurrentToken();
         }
@@ -62,17 +65,21 @@ public class ASTParser {
     /**
      * expr   : term ((PLUS | MINUS) term)*
      * term   : factor ((MUL | DIV) factor)*
-     * factor : INTEGER | LPAREN expr RPAREN
+     * factor : INTEGER | LeftBracket expr LeftBracket
      */
     public AST expr() {
         AST node = term();
         Token token = getCurrentToken();
 
         //注意这里是用while 应为((PLUS | MINUS) term)*代表没有或者多个
-        while (Tokens.isOperator(token) && "+".equals(token.getValue())
-                || Tokens.isOperator(token) && "-".equals(token.getValue())
+        while (Tokens.isPlus(token)
+                || Tokens.isMinus(token)
         ) {
-            this.eat(TokenType.operator);
+            if (Tokens.isPlus(token)) {
+                this.eat(TokenType.plus);
+            } else {
+                this.eat(TokenType.minus);
+            }
             node = new BinOp(node, token, this.term());
             token = getCurrentToken();
         }
