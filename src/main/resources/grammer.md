@@ -1,8 +1,10 @@
 ## 数据
-data: digit|string|bool
+data: digit|string|bool|term
 
 ## 表达式
-express: label|data -> +|-|*|/|% -> label|data 
+expression: data -> +|-|*|/|% -> data
+
+many expression: (expression)-> +|-|*|/|% -> (expression)
 
 
 ## 声明变量与赋值
@@ -20,8 +22,7 @@ func_invoke: label->(->label|data|express->)->;
 
 
 
-a=2;
-println(a>0);
+
 
 
 

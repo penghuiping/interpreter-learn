@@ -23,6 +23,12 @@ import java.util.Scanner;
  */
 public class Lexer {
 
+    /**
+     * 分词，把文章拆分成一个一个最小的词
+     *
+     * @param text
+     * @return
+     */
     public static List<Token> parse(String text) {
         List<Token> result = new ArrayList<>();
         int row = 0;
@@ -101,10 +107,16 @@ public class Lexer {
                         result.add(token);
                         i = i + tokenValue.length();
                     }
-                } else if (cv == '(' || cv == ')') {
-                    //括号
+                } else if (cv == '(') {
+                    //左括号
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.bracket, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.leftBracket, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == ')') {
+                    //右括号
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.rightBracket, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '{' || cv == '}') {

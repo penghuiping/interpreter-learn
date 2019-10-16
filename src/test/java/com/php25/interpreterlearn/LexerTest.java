@@ -1,13 +1,8 @@
 package com.php25.interpreterlearn;
 
-import com.php25.interpreterlearn.bo.ExpressionNode;
 import com.php25.interpreterlearn.bo.Token;
 import com.php25.interpreterlearn.constant.TokenType;
-import com.php25.interpreterlearn.engine.AST;
-import com.php25.interpreterlearn.engine.Core;
-import com.php25.interpreterlearn.engine.Grammar;
 import com.php25.interpreterlearn.engine.Lexer;
-import com.php25.interpreterlearn.engine.Parser;
 import com.php25.interpreterlearn.exception.IllegalStateException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -183,25 +178,24 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(3).getType(), TokenType.digit);// 1
         Assert.assertSame(tokenList4.get(4).getType(), TokenType.separator);//;
         Assert.assertSame(tokenList4.get(5).getType(), TokenType.keyword);// if
-        Assert.assertSame(tokenList4.get(6).getType(), TokenType.bracket);// (
+        Assert.assertSame(tokenList4.get(6).getType(), TokenType.leftBracket);// (
         Assert.assertSame(tokenList4.get(7).getType(), TokenType.term);// a
         Assert.assertSame(tokenList4.get(8).getType(), TokenType.boolOperator);//>
         Assert.assertSame(tokenList4.get(9).getType(), TokenType.digit);//0
-        Assert.assertSame(tokenList4.get(10).getType(), TokenType.bracket);//)
+        Assert.assertSame(tokenList4.get(10).getType(), TokenType.rightBracket);//)
         Assert.assertSame(tokenList4.get(11).getType(), TokenType.bigBracket);//{
         Assert.assertSame(tokenList4.get(12).getType(), TokenType.bigBracket);//}
         Assert.assertSame(tokenList4.get(13).getType(), TokenType.keyword);//else
         Assert.assertSame(tokenList4.get(14).getType(), TokenType.keyword);//if
-        Assert.assertSame(tokenList4.get(15).getType(), TokenType.bracket);//(
+        Assert.assertSame(tokenList4.get(15).getType(), TokenType.leftBracket);//(
         Assert.assertSame(tokenList4.get(16).getType(), TokenType.term);//a
         Assert.assertSame(tokenList4.get(17).getType(), TokenType.boolOperator);//==
         Assert.assertSame(tokenList4.get(18).getType(), TokenType.digit);//0
-        Assert.assertSame(tokenList4.get(19).getType(), TokenType.bracket);//)
+        Assert.assertSame(tokenList4.get(19).getType(), TokenType.rightBracket);//)
         Assert.assertSame(tokenList4.get(20).getType(), TokenType.keyword);//else
         Assert.assertSame(tokenList4.get(21).getType(), TokenType.bigBracket);//{
         Assert.assertSame(tokenList4.get(22).getType(), TokenType.bigBracket);//{
     }
-
 
 
 }

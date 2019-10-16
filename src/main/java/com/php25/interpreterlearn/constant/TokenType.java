@@ -50,10 +50,16 @@ public enum TokenType {
      */
     keyword,
 
+
     /**
-     * 括号 (,)
+     * 左括号
      */
-    bracket,
+    leftBracket,
+
+    /**
+     * 右括号
+     */
+    rightBracket,
 
     /**
      * 大括号 {,}
