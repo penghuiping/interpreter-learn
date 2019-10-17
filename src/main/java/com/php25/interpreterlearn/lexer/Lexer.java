@@ -41,7 +41,7 @@ public class Lexer {
                     col = i;
                     StringBuilder tokenValue = new StringBuilder();
                     getDigit(tokenValue, line.substring(i), row, 0);
-                    Token token = new Token(tokenValue.toString(), TokenType.digit, new Position(row, col));
+                    Token token = new Token(tokenValue.toString(), TokenType.INTEGER, new Position(row, col));
                     result.add(token);
                     i = i + tokenValue.length();
                 } else if (cv == '\"') {
@@ -68,32 +68,32 @@ public class Lexer {
 
                     //去掉字符串中的双引号
                     tokenValue = tokenValue.replace("\"", "");
-                    Token token = new Token(tokenValue, TokenType.string, new Position(row, col));
+                    Token token = new Token(tokenValue, TokenType.STRING, new Position(row, col));
                     result.add(token);
                 } else if (cv == '+') {
                     //基本运算符
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.plus, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.PLUS, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '-') {
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.minus, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.MINUS, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '*') {
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.mul, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.MUL, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '/') {
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.div, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.DIV, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '%') {
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.mod, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.MOD, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '&' || cv == '=' || cv == '|' || cv == '!' || cv == '>' || cv == '<') {
@@ -105,13 +105,13 @@ public class Lexer {
                         //先判断 bool运算符
                         getBoolOperator(tokenValue, lineTmp, row, 0);
                         if (tokenValue.length() > 0) {
-                            Token token = new Token(tokenValue.toString(), TokenType.boolOperator, new Position(row, col));
+                            Token token = new Token(tokenValue.toString(), TokenType.BOOL_OPERATOR, new Position(row, col));
                             result.add(token);
                             i = i + tokenValue.length();
                         } else {
                             //在判断 assign =赋值运算符
                             if ('=' == lineTmp.charAt(0)) {
-                                Token tokenAssign = new Token("=", TokenType.assign, new Position(row, col));
+                                Token tokenAssign = new Token("=", TokenType.ASSIGN, new Position(row, col));
                                 result.add(tokenAssign);
                                 ++i;
                             }
@@ -119,26 +119,26 @@ public class Lexer {
                     } else {
                         //bool运算符
                         getBoolOperator(tokenValue, lineTmp, row, 0);
-                        Token token = new Token(tokenValue.toString(), TokenType.boolOperator, new Position(row, col));
+                        Token token = new Token(tokenValue.toString(), TokenType.BOOL_OPERATOR, new Position(row, col));
                         result.add(token);
                         i = i + tokenValue.length();
                     }
                 } else if (cv == '(') {
                     //左括号
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.leftBracket, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.LEFT_BRACKET, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == ')') {
                     //右括号
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.rightBracket, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.RIGHT_BRACKET, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == '{' || cv == '}') {
                     //大括号
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.bigBracket, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.BIG_BRACKET, new Position(row, col));
                     result.add(token);
                     ++i;
                 } else if (cv == ' ' || cv == ';' || cv == ',') {
@@ -149,7 +149,7 @@ public class Lexer {
                             col = i;
                             StringBuilder tokenValue = new StringBuilder();
                             getSpace(tokenValue, line.substring(i), row, 0);
-                            Token token = new Token(tokenValue.toString(), TokenType.separator, new Position(row, col));
+                            Token token = new Token(tokenValue.toString(), TokenType.SEPARATOR, new Position(row, col));
                             //result.add(token);
                             i = i + tokenValue.length();
                             break;
@@ -157,7 +157,7 @@ public class Lexer {
                         case ';': {
                             //分隔符-分号
                             col = i;
-                            Token token = new Token(Character.toString(cv), TokenType.separator, new Position(row, col));
+                            Token token = new Token(Character.toString(cv), TokenType.SEPARATOR, new Position(row, col));
                             result.add(token);
                             ++i;
                             break;
@@ -165,7 +165,7 @@ public class Lexer {
                         case ',': {
                             //分隔符-逗号
                             col = i;
-                            Token token = new Token(Character.toString(cv), TokenType.separator, new Position(row, col));
+                            Token token = new Token(Character.toString(cv), TokenType.SEPARATOR, new Position(row, col));
                             result.add(token);
                             ++i;
                             break;
@@ -178,31 +178,33 @@ public class Lexer {
                     col = i;
                     StringBuilder tokenValue = new StringBuilder();
                     getLabel(tokenValue, line.substring(i), row, 0);
-                    Token token = new Token(tokenValue.toString(), TokenType.term, new Position(row, col));
+                    Token token = new Token(tokenValue.toString(), TokenType.IDENTIFIER, new Position(row, col));
 
                     //bool值处理
                     if ("true".equals(tokenValue.toString()) || "false".equals(tokenValue.toString())) {
-                        token.setType(TokenType.bool);
+                        token.setType(TokenType.BOOL);
                     }
-
                     //关键字处理
-                    if ("var".equals(tokenValue.toString())
-                            || "if".equals(tokenValue.toString())
-                            || "else".equals(tokenValue.toString())
-                            || "for".equals(tokenValue.toString())
-                            || "while".equals(tokenValue.toString())
-                            || "break".equals(tokenValue.toString())
-                            || "continue".equals(tokenValue.toString())
-                    ) {
-                        token.setType(TokenType.keyword);
+                    else if ("var".equals(tokenValue.toString())) {
+                        token.setType(TokenType.VAR);
+                    } else if ("if".equals(tokenValue.toString())) {
+                        token.setType(TokenType.IF);
+                    } else if ("else".equals(tokenValue.toString())) {
+                        token.setType(TokenType.ELSE);
+                    } else if ("for".equals(tokenValue.toString())) {
+                        token.setType(TokenType.FOR);
+                    } else if ("while".equals(tokenValue.toString())) {
+                        token.setType(TokenType.WHILE);
+                    } else if ("break".equals(tokenValue.toString())) {
+                        token.setType(TokenType.BREAK);
+                    } else if ("continue".equals(tokenValue.toString())) {
+                        token.setType(TokenType.CONTINUE);
                     }
-
                     result.add(token);
                     i = i + tokenValue.length();
                 }
             }
         }
-
         return result;
     }
 

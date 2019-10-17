@@ -3,7 +3,10 @@ package com.php25.interpreterlearn.runtime;
 import com.php25.interpreterlearn.ast.AST;
 import com.php25.interpreterlearn.ast.BinOp;
 import com.php25.interpreterlearn.ast.Digit;
+import com.php25.interpreterlearn.ast.UnaryOp;
 import com.php25.interpreterlearn.exception.Exceptions;
+import com.php25.interpreterlearn.lexer.Token;
+import com.php25.interpreterlearn.lexer.Tokens;
 
 /**
  * @author penghuiping
@@ -16,6 +19,8 @@ public class Interpreter {
             return visitBinOp(ast);
         } else if (ast instanceof Digit) {
             return visitDigit(ast);
+        } else if (ast instanceof UnaryOp) {
+            return visitUnaryOp(ast);
         } else {
             throw Exceptions.throwIllegalStateException("不支持此类型的AST");
         }
@@ -32,6 +37,19 @@ public class Interpreter {
     private Integer visitDigit(AST ast) {
         Digit digit = (Digit) ast;
         return Integer.parseInt(digit.getToken().getValue());
+    }
+
+    private Integer visitUnaryOp(AST ast) {
+        UnaryOp unaryOp = (UnaryOp) ast;
+        AST next = unaryOp.getNext();
+        Integer value = visit(next);
+        Token op = unaryOp.getOp();
+
+        if (Tokens.isMinus(op)) {
+            return -value;
+        } else {
+            return value;
+        }
     }
 
 

@@ -8,16 +8,16 @@ public class Tokens {
 
 
     public static boolean isData(Token token) {
-        if (token.getType() == TokenType.digit || token.getType() == TokenType.string
-                || token.getType() == TokenType.bool || token.getType() == TokenType.term) {
+        if (token.getType() == TokenType.INTEGER || token.getType() == TokenType.STRING
+                || token.getType() == TokenType.BOOL || token.getType() == TokenType.IDENTIFIER) {
             return true;
         } else {
             return false;
         }
     }
 
-    public static boolean isDigit(Token token) {
-        if (token.getType() == TokenType.digit) {
+    public static boolean isInteger(Token token) {
+        if (token.getType() == TokenType.INTEGER) {
             return true;
         } else {
             return false;
@@ -25,7 +25,7 @@ public class Tokens {
     }
 
     public static boolean isBracket(Token token) {
-        if (token.getType() == TokenType.leftBracket || token.getType() == TokenType.rightBracket) {
+        if (token.getType() == TokenType.LEFT_BRACKET || token.getType() == TokenType.RIGHT_BRACKET) {
             return true;
         } else {
             return false;
@@ -33,7 +33,7 @@ public class Tokens {
     }
 
     public static boolean isLeftBracket(Token token) {
-        if (token.getType() == TokenType.leftBracket) {
+        if (token.getType() == TokenType.LEFT_BRACKET) {
             return true;
         } else {
             return false;
@@ -41,7 +41,7 @@ public class Tokens {
     }
 
     public static boolean isRightBracket(Token token) {
-        if (token.getType() == TokenType.rightBracket) {
+        if (token.getType() == TokenType.RIGHT_BRACKET) {
             return true;
         } else {
             return false;
@@ -49,11 +49,11 @@ public class Tokens {
     }
 
     public static boolean isOperator(Token token) {
-        if (token.getType() == TokenType.plus
-                || token.getType() == TokenType.minus
-                || token.getType() == TokenType.mul
-                || token.getType() == TokenType.div
-                || token.getType() == TokenType.mod
+        if (token.getType() == TokenType.PLUS
+                || token.getType() == TokenType.MINUS
+                || token.getType() == TokenType.MUL
+                || token.getType() == TokenType.DIV
+                || token.getType() == TokenType.MOD
         ) {
             return true;
         } else {
@@ -62,23 +62,23 @@ public class Tokens {
     }
 
     public static boolean isPlus(Token token) {
-        return token.getType() == TokenType.plus;
+        return token.getType() == TokenType.PLUS;
     }
 
     public static boolean isMinus(Token token) {
-        return token.getType() == TokenType.minus;
+        return token.getType() == TokenType.MINUS;
     }
 
     public static boolean isMul(Token token) {
-        return token.getType() == TokenType.mul;
+        return token.getType() == TokenType.MUL;
     }
 
     public static boolean isDiv(Token token) {
-        return token.getType() == TokenType.div;
+        return token.getType() == TokenType.DIV;
     }
 
     public static boolean isMod(Token token) {
-        return token.getType() == TokenType.mod;
+        return token.getType() == TokenType.MOD;
     }
 
 

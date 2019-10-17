@@ -1,9 +1,9 @@
 package com.php25.interpreterlearn.ast;
 
+import com.php25.interpreterlearn.exception.Exceptions;
 import com.php25.interpreterlearn.lexer.Token;
 import com.php25.interpreterlearn.lexer.TokenType;
 import com.php25.interpreterlearn.lexer.Tokens;
-import com.php25.interpreterlearn.exception.Exceptions;
 
 import java.util.List;
 
@@ -24,24 +24,31 @@ public class ASTParser {
 
 
     /**
-     * factor : INTEGER | LeftBracket expr RightBracket
+     * factor : (PLUS | MINUS) factor | INTEGER | LeftBracket expr RightBracket
      */
     public AST factor() {
         AST node = null;
         Token token = getCurrentToken();
-        if (Tokens.isDigit(token)) {
+        if (Tokens.isPlus(token) || Tokens.isMinus(token)) {
+            if (Tokens.isPlus(token)) {
+                this.eat(TokenType.PLUS);
+            } else {
+                this.eat(TokenType.MINUS);
+            }
+            node = new UnaryOp(token, this.factor());
+        } else if (Tokens.isInteger(token)) {
             node = new Digit(token);
-            this.eat(TokenType.digit);
+            this.eat(TokenType.INTEGER);
         } else if (Tokens.isLeftBracket(token)) {
-            this.eat(TokenType.leftBracket);
+            this.eat(TokenType.LEFT_BRACKET);
             node = this.expr();
-            this.eat(TokenType.rightBracket);
+            this.eat(TokenType.RIGHT_BRACKET);
         }
         return node;
     }
 
     /**
-     * term : factor ((MUL | DIV) factor)*
+     * term : factor ((MUL | DIV | MOD) factor)*
      */
     public AST term() {
         AST node = this.factor();
@@ -50,11 +57,14 @@ public class ASTParser {
         //注意这里是用while 应为((MUL | DIV) factor)*表没有或者多个
         while (Tokens.isMul(token)
                 || Tokens.isDiv(token)
+                || Tokens.isMod(token)
         ) {
             if (Tokens.isMul(token)) {
-                this.eat(TokenType.mul);
+                this.eat(TokenType.MUL);
+            } else if (Tokens.isMod(token)) {
+                this.eat(TokenType.MOD);
             } else {
-                this.eat(TokenType.div);
+                this.eat(TokenType.DIV);
             }
             node = new BinOp(node, token, this.factor());
             token = getCurrentToken();
@@ -64,8 +74,8 @@ public class ASTParser {
 
     /**
      * expr   : term ((PLUS | MINUS) term)*
-     * term   : factor ((MUL | DIV) factor)*
-     * factor : INTEGER | LeftBracket expr LeftBracket
+     * term   : factor ((MUL | DIV | MOD) factor)*
+     * factor : (PLUS | MINUS) factor | INTEGER | LeftBracket expr LeftBracket
      */
     public AST expr() {
         AST node = term();
@@ -76,9 +86,9 @@ public class ASTParser {
                 || Tokens.isMinus(token)
         ) {
             if (Tokens.isPlus(token)) {
-                this.eat(TokenType.plus);
+                this.eat(TokenType.PLUS);
             } else {
-                this.eat(TokenType.minus);
+                this.eat(TokenType.MINUS);
             }
             node = new BinOp(node, token, this.term());
             token = getCurrentToken();

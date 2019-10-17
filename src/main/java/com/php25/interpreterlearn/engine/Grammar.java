@@ -136,6 +136,9 @@ public class Grammar {
                 } else if (Tokens.isRightBracket(previousToken) && Tokens.isOperator(currentToken)) {
                     //rightBracket->operator ok
                     newTokens.add(currentToken);
+                } else if (Tokens.isLeftBracket(previousToken) && Tokens.isOperator(currentToken)) {
+                    //leftBracket->operator ok
+                    newTokens.add(currentToken);
                 } else {
                     throw Exceptions.throwIllegalStateException(String.format("Grammar分析阶段出错,表达式语法出错,位于%d行,%d列", currentToken.getPosition().getRow(), currentToken.getPosition().getColumn()));
                 }

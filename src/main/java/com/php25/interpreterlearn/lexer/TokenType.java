@@ -6,84 +6,51 @@ package com.php25.interpreterlearn.lexer;
  */
 public enum TokenType {
     /**
-     * 操作符 +
+     * 操作符 +,-,*,/,%
      */
-    plus,
+    PLUS, MINUS, MUL, DIV, MOD,
 
     /**
-     * 操作符 -
+     * 1. 整形数字 0,1,2,4,5,6,7,8,9
+     * 2. 布尔值 true,false
+     * 3. 字符串 "hello"
      */
-    minus,
+    INTEGER, BOOL, STRING,
 
     /**
-     * 操作符 *
+     * 左括号,右括号
      */
-    mul,
+    LEFT_BRACKET, RIGHT_BRACKET,
 
-    /**
-     * 操作符 /
-     */
-    div,
-
-    /**
-     * 操作符 %
-     */
-    mod,
-
-
-    /**
-     * 赋值 =
-     */
-    assign,
-
-    /**
-     * &&,||,==,!=,>,<,>=,<=,
-     */
-    boolOperator,
-
-    /**
-     * 数字 0,1,2,4,5,6,7,8,9
-     */
-    digit,
-
-    /**
-     * true,false
-     */
-    bool,
-
-    /**
-     * 字符串
-     */
-    string,
-
-    /**
-     * 术语
-     */
-    term,
-
-    /**
-     * 分隔符  ,;,\n
-     */
-    separator,
 
     /**
      * 关键字  if,else,for,while,var,break,continue
      */
-    keyword,
-
-
-    /**
-     * 左括号
-     */
-    leftBracket,
+    IF,ELSE,FOR,WHILE,VAR,BREAK,CONTINUE,
 
     /**
-     * 右括号
+     * 赋值 =
      */
-    rightBracket,
+    ASSIGN,
+
+    /**
+     * &&,||,==,!=,>,<,>=,<=,
+     */
+    BOOL_OPERATOR,
+
+    /**
+     * 标识
+     */
+    IDENTIFIER,
+
+    /**
+     * 分隔符  ,;,\n
+     */
+    SEPARATOR,
+
 
     /**
      * 大括号 {,}
      */
-    bigBracket,
+    BIG_BRACKET
 }
