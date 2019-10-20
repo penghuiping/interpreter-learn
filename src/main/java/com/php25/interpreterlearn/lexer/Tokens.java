@@ -8,57 +8,52 @@ public class Tokens {
 
 
     public static boolean isData(Token token) {
-        if (token.getType() == TokenType.INTEGER || token.getType() == TokenType.STRING
-                || token.getType() == TokenType.BOOL || token.getType() == TokenType.IDENTIFIER) {
-            return true;
-        } else {
-            return false;
-        }
+        return token.getType() == TokenType.INTEGER
+                || token.getType() == TokenType.STRING
+                || token.getType() == TokenType.BOOL
+                || token.getType() == TokenType.IDENTIFIER;
     }
 
     public static boolean isInteger(Token token) {
-        if (token.getType() == TokenType.INTEGER) {
-            return true;
-        } else {
-            return false;
-        }
+        return token.getType() == TokenType.INTEGER;
     }
 
     public static boolean isBracket(Token token) {
-        if (token.getType() == TokenType.LEFT_BRACKET || token.getType() == TokenType.RIGHT_BRACKET) {
-            return true;
-        } else {
-            return false;
-        }
+        return token.getType() == TokenType.LEFT_BRACKET
+                || token.getType() == TokenType.RIGHT_BRACKET;
     }
 
     public static boolean isLeftBracket(Token token) {
-        if (token.getType() == TokenType.LEFT_BRACKET) {
-            return true;
-        } else {
-            return false;
-        }
+        return token.getType() == TokenType.LEFT_BRACKET;
     }
 
     public static boolean isRightBracket(Token token) {
-        if (token.getType() == TokenType.RIGHT_BRACKET) {
-            return true;
-        } else {
-            return false;
-        }
+        return token.getType() == TokenType.RIGHT_BRACKET;
+    }
+
+    public static boolean isBigBracket(Token token) {
+        return token.getType() == TokenType.BIG_LEFT_BRACKET
+                || token.getType() == TokenType.BIG_RIGHT_BRACKET;
+    }
+
+    public static boolean isBigLeftBracket(Token token) {
+        return token.getType() == TokenType.BIG_LEFT_BRACKET;
+    }
+
+    public static boolean isBigRightBracket(Token token) {
+        return token.getType() == TokenType.BIG_RIGHT_BRACKET;
+    }
+
+    public static boolean isSemicolon(Token token) {
+        return token.getType() == TokenType.SEMICOLON;
     }
 
     public static boolean isOperator(Token token) {
-        if (token.getType() == TokenType.PLUS
+        return token.getType() == TokenType.PLUS
                 || token.getType() == TokenType.MINUS
                 || token.getType() == TokenType.MUL
                 || token.getType() == TokenType.DIV
-                || token.getType() == TokenType.MOD
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+                || token.getType() == TokenType.MOD;
     }
 
     public static boolean isPlus(Token token) {
@@ -81,5 +76,12 @@ public class Tokens {
         return token.getType() == TokenType.MOD;
     }
 
+    public static boolean isIdentifier(Token token) {
+        return token.getType() == TokenType.IDENTIFIER;
+    }
+
+    public static boolean isAssign(Token token) {
+        return token.getType() == TokenType.ASSIGN;
+    }
 
 }

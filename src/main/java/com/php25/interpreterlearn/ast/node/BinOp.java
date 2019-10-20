@@ -1,6 +1,8 @@
-package com.php25.interpreterlearn.ast;
+package com.php25.interpreterlearn.ast.node;
 
+import com.php25.interpreterlearn.ast.AST;
 import com.php25.interpreterlearn.lexer.Token;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,17 +12,12 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@AllArgsConstructor
 public class BinOp extends AST {
 
-    private AST left;
+    private AST leftExpr;
 
     private Token op;
 
-    private AST right;
-
-    public BinOp(AST left, Token op, AST right) {
-        this.left = left;
-        this.op = op;
-        this.right = right;
-    }
+    private AST rightExpr;
 }

@@ -1,5 +1,8 @@
 package com.php25.interpreterlearn.ast;
 
+import com.php25.interpreterlearn.ast.node.BinOp;
+import com.php25.interpreterlearn.ast.node.Digit;
+import com.php25.interpreterlearn.ast.node.UnaryOp;
 import com.php25.interpreterlearn.exception.Exceptions;
 import com.php25.interpreterlearn.lexer.Token;
 
@@ -20,8 +23,8 @@ public class Asts {
     public static void middleOrderTraversalTree(AST binaryTreeNode, Consumer<Token> consumer) {
         if (binaryTreeNode instanceof BinOp) {
             BinOp binOp = (BinOp) binaryTreeNode;
-            AST left = binOp.getLeft();
-            AST right = binOp.getRight();
+            AST left = binOp.getLeftExpr();
+            AST right = binOp.getRightExpr();
 
             if (left != null) {
                 middleOrderTraversalTree(left, consumer);

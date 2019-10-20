@@ -34,6 +34,11 @@ public enum TokenType {
     ASSIGN,
 
     /**
+     * 大括号 {,}
+     */
+    BIG_LEFT_BRACKET,BIG_RIGHT_BRACKET,
+
+    /**
      * &&,||,==,!=,>,<,>=,<=,
      */
     BOOL_OPERATOR,
@@ -46,11 +51,8 @@ public enum TokenType {
     /**
      * 分隔符  ,;,\n
      */
-    SEPARATOR,
+    SEPARATOR,SEMICOLON,
 
 
-    /**
-     * 大括号 {,}
-     */
-    BIG_BRACKET
+
 }

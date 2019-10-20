@@ -135,13 +135,25 @@ public class Lexer {
                     Token token = new Token(Character.toString(cv), TokenType.RIGHT_BRACKET, new Position(row, col));
                     result.add(token);
                     ++i;
-                } else if (cv == '{' || cv == '}') {
-                    //大括号
+                } else if (cv == '{') {
+                    //左大括号
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.BIG_BRACKET, new Position(row, col));
+                    Token token = new Token(Character.toString(cv), TokenType.BIG_LEFT_BRACKET, new Position(row, col));
                     result.add(token);
                     ++i;
-                } else if (cv == ' ' || cv == ';' || cv == ',') {
+                } else if (cv == '}') {
+                    //右大括号
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.BIG_RIGHT_BRACKET, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == ';') {
+                    //分隔符-分号
+                    col = i;
+                    Token token = new Token(Character.toString(cv), TokenType.SEMICOLON, new Position(row, col));
+                    result.add(token);
+                    ++i;
+                } else if (cv == ' ' || cv == ',') {
                     //分隔符
                     switch (cv) {
                         case ' ': {
@@ -154,14 +166,6 @@ public class Lexer {
                             i = i + tokenValue.length();
                             break;
                         }
-                        case ';': {
-                            //分隔符-分号
-                            col = i;
-                            Token token = new Token(Character.toString(cv), TokenType.SEPARATOR, new Position(row, col));
-                            result.add(token);
-                            ++i;
-                            break;
-                        }
                         case ',': {
                             //分隔符-逗号
                             col = i;
@@ -171,13 +175,12 @@ public class Lexer {
                             break;
                         }
                         default:
-
                     }
                 } else if (Character.isLetter(cv) || cv == '_') {
                     //字符名称
                     col = i;
                     StringBuilder tokenValue = new StringBuilder();
-                    getLabel(tokenValue, line.substring(i), row, 0);
+                    getIdentifier(tokenValue, line.substring(i), row, 0);
                     Token token = new Token(tokenValue.toString(), TokenType.IDENTIFIER, new Position(row, col));
 
                     //bool值处理
@@ -255,12 +258,12 @@ public class Lexer {
      * @param row
      * @param column
      */
-    private static void getLabel(StringBuilder token, String text, int row, int column) {
+    private static void getIdentifier(StringBuilder token, String text, int row, int column) {
         if (column < text.length()) {
             char v = text.charAt(column);
             if (Character.isLetter(v) || v == '_' || Character.isDigit(v)) {
                 token.append(v);
-                getLabel(token, text, row, ++column);
+                getIdentifier(token, text, row, ++column);
             } else if (v == '!' || v == '@' || v == '#' || v == '$' || v == '^' || v == '\\' || v == '.') {
                 token.append(v);
                 throw Exceptions.throwIllegalStateException(String.format("lexical阶段出错,非法字符名称:%s,位于第%d行,%d列", token, row, column));

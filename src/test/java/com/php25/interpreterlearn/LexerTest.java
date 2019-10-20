@@ -183,8 +183,8 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(8).getType(), TokenType.BOOL_OPERATOR);//>
         Assert.assertSame(tokenList4.get(9).getType(), TokenType.INTEGER);//0
         Assert.assertSame(tokenList4.get(10).getType(), TokenType.RIGHT_BRACKET);//)
-        Assert.assertSame(tokenList4.get(11).getType(), TokenType.BIG_BRACKET);//{
-        Assert.assertSame(tokenList4.get(12).getType(), TokenType.BIG_BRACKET);//}
+        Assert.assertSame(tokenList4.get(11).getType(), TokenType.BIG_LEFT_BRACKET);//{
+        Assert.assertSame(tokenList4.get(12).getType(), TokenType.BIG_RIGHT_BRACKET);//}
         Assert.assertSame(tokenList4.get(13).getType(), TokenType.ELSE);//else
         Assert.assertSame(tokenList4.get(14).getType(), TokenType.IF);//if
         Assert.assertSame(tokenList4.get(15).getType(), TokenType.LEFT_BRACKET);//(
@@ -193,8 +193,8 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(18).getType(), TokenType.INTEGER);//0
         Assert.assertSame(tokenList4.get(19).getType(), TokenType.RIGHT_BRACKET);//)
         Assert.assertSame(tokenList4.get(20).getType(), TokenType.ELSE);//else
-        Assert.assertSame(tokenList4.get(21).getType(), TokenType.BIG_BRACKET);//{
-        Assert.assertSame(tokenList4.get(22).getType(), TokenType.BIG_BRACKET);//{
+        Assert.assertSame(tokenList4.get(21).getType(), TokenType.BIG_LEFT_BRACKET);//{
+        Assert.assertSame(tokenList4.get(22).getType(), TokenType.BIG_RIGHT_BRACKET);//{
     }
 
 

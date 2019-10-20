@@ -1,10 +1,18 @@
 package com.php25.interpreterlearn.ast;
 
+import com.php25.interpreterlearn.ast.node.AssignStatement;
+import com.php25.interpreterlearn.ast.node.BinOp;
+import com.php25.interpreterlearn.ast.node.CompoundStatement;
+import com.php25.interpreterlearn.ast.node.Digit;
+import com.php25.interpreterlearn.ast.node.StatementList;
+import com.php25.interpreterlearn.ast.node.UnaryOp;
+import com.php25.interpreterlearn.ast.node.Variable;
 import com.php25.interpreterlearn.exception.Exceptions;
 import com.php25.interpreterlearn.lexer.Token;
 import com.php25.interpreterlearn.lexer.TokenType;
 import com.php25.interpreterlearn.lexer.Tokens;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,13 +21,106 @@ import java.util.List;
  */
 public class ASTParser {
 
-
     private List<Token> tokens;
 
     private int current = 0;
 
     public ASTParser(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+
+    /**
+     * variable: identifier
+     */
+    public AST variable() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isIdentifier(token)) {
+            this.eat(TokenType.IDENTIFIER);
+            node = new Variable(token);
+        }
+        return node;
+    }
+
+
+    /**
+     * statement : compound_statement | assignment_statement
+     *
+     * @return
+     */
+    public AST statement() {
+        AST node = null;
+        node = this.compoundStatement();
+        if (null != node) {
+            return node;
+        }
+        node = this.assignStatement();
+        return node;
+    }
+
+
+    /**
+     * compound_statement : { statement_list }
+     *
+     * @return
+     */
+    public AST compoundStatement() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isBigLeftBracket(token)) {
+            this.eat(TokenType.BIG_LEFT_BRACKET);
+            node = this.statementList();
+            Token token1 = getCurrentToken();
+            this.eat(TokenType.BIG_RIGHT_BRACKET);
+            node = new CompoundStatement(token, node, token1);
+        }
+        return node;
+    }
+
+
+    /**
+     * statement_list : statement | statement SEMI statement_list
+     */
+    public AST statementList() {
+        AST node = this.statement();
+
+        List<AST> list = new ArrayList<>();
+        StatementList resultNode = new StatementList(list);
+        list.add(node);
+
+        Token token = getCurrentToken();
+        while (Tokens.isSemicolon(token)) {
+            this.eat(TokenType.SEMICOLON);
+            node = this.statement();
+            if (null == node) {
+                //不存在就跳出循环
+                break;
+            }else {
+                //存在，加入statement 并且继续判断
+                list.add(node);
+                token = getCurrentToken();
+            }
+        }
+        return resultNode;
+    }
+
+    /**
+     * assign_statement: variable assign expr
+     */
+    public AST assignStatement() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isIdentifier(token)) {
+            node = this.variable();
+
+            token = getCurrentToken();
+            if (Tokens.isAssign(token)) {
+                this.eat(TokenType.ASSIGN);
+                node = new AssignStatement(node, token, this.expr());
+            }
+        }
+        return node;
     }
 
 
@@ -69,10 +170,16 @@ public class ASTParser {
             node = new BinOp(node, token, this.factor());
             token = getCurrentToken();
         }
+
         return node;
     }
 
     /**
+     * statement : compound_statement | assignment_statement | empty
+     * compound_statement : { statement_list }
+     * statement_list : statement | statement SEMI statement_list
+     * assign_statement: variable assign expr
+     * variable: identifier
      * expr   : term ((PLUS | MINUS) term)*
      * term   : factor ((MUL | DIV | MOD) factor)*
      * factor : (PLUS | MINUS) factor | INTEGER | LeftBracket expr LeftBracket
@@ -96,8 +203,10 @@ public class ASTParser {
         return node;
     }
 
+
+
     public AST parse() {
-        return this.expr();
+        return this.statementList();
     }
 
 
@@ -109,7 +218,7 @@ public class ASTParser {
         if (getCurrentToken().getType() == tokenType) {
             getNextToken();
         } else {
-            throw Exceptions.throwIllegalStateException("syntax error");
+            error();
         }
     }
 
