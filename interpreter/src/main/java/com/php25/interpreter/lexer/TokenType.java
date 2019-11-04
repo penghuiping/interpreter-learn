@@ -26,7 +26,7 @@ public enum TokenType {
     /**
      * 关键字  if,else,for,while,var,break,continue
      */
-    IF,ELSE,FOR,WHILE,VAR,BREAK,CONTINUE,
+    IF,ELSE,FOR,WHILE,VAR,BREAK,CONTINUE,LET,
 
     /**
      * 赋值 =
@@ -51,8 +51,11 @@ public enum TokenType {
     /**
      * 分隔符  ,;,\n
      */
-    SEPARATOR,SEMICOLON,
+    SEPARATOR,SEMICOLON,COMMA,
 
-
+    /**
+     * "\/*,*\/,//"
+     */
+    LEFT_BLOCK_COMMENT,RIGHT_BLOCK_COMMENT,ONE_LINE_COMMENT
 
 }

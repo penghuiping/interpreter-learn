@@ -6,6 +6,21 @@ package com.php25.interpreter.lexer;
  */
 public class Tokens {
 
+    public static boolean isLeftBlockComment(Token token) {
+        return token.getType() == TokenType.LEFT_BLOCK_COMMENT;
+    }
+
+    public static boolean isRightBlockComment(Token token) {
+        return token.getType() == TokenType.RIGHT_BLOCK_COMMENT;
+    }
+
+    public static boolean isOneLineComment(Token token) {
+        return token.getType() == TokenType.ONE_LINE_COMMENT;
+    }
+
+    public static boolean isComma(Token token) {
+        return token.getType() == TokenType.COMMA;
+    }
 
     public static boolean isData(Token token) {
         return token.getType() == TokenType.INTEGER
@@ -16,6 +31,10 @@ public class Tokens {
 
     public static boolean isInteger(Token token) {
         return token.getType() == TokenType.INTEGER;
+    }
+
+    public static boolean isString(Token token) {
+        return token.getType() == TokenType.STRING;
     }
 
     public static boolean isBracket(Token token) {
@@ -74,6 +93,14 @@ public class Tokens {
 
     public static boolean isMod(Token token) {
         return token.getType() == TokenType.MOD;
+    }
+
+    public static boolean isVar(Token token) {
+        return token.getType() == TokenType.VAR;
+    }
+
+    public static boolean isLet(Token token) {
+        return token.getType() == TokenType.LET;
     }
 
     public static boolean isIdentifier(Token token) {

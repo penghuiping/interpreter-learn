@@ -1,23 +1,25 @@
-package com.php25.interpreter.ast.node;
+package com.php25.interpreter.syntax.node;
 
-import com.php25.interpreter.ast.AST;
+import com.php25.interpreter.AST;
 import com.php25.interpreter.lexer.Token;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * expr                  -> term ((PLUS | MINUS) term)*
+ *
  * @author penghuiping
  * @date 2019/10/16 09:29
  */
 @Getter
 @Setter
 @AllArgsConstructor
-public class BinOp extends AST {
+public class Expr extends AST {
 
-    private AST leftExpr;
+    private AST leftTerm;
 
     private Token op;
 
-    private AST rightExpr;
+    private AST rightTerm;
 }

@@ -158,15 +158,15 @@ public class LexerTest {
         Assert.assertSame(tokenList1.get(0).getType(), TokenType.INTEGER);
         Assert.assertSame(tokenList1.get(1).getType(), TokenType.BOOL_OPERATOR);
         Assert.assertSame(tokenList1.get(2).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(3).getType(), TokenType.SEPARATOR);
+        Assert.assertSame(tokenList1.get(3).getType(), TokenType.SEMICOLON);
         Assert.assertSame(tokenList1.get(4).getType(), TokenType.INTEGER);
         Assert.assertSame(tokenList1.get(5).getType(), TokenType.BOOL_OPERATOR);
         Assert.assertSame(tokenList1.get(6).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(7).getType(), TokenType.SEPARATOR);
+        Assert.assertSame(tokenList1.get(7).getType(), TokenType.SEMICOLON);
         Assert.assertSame(tokenList1.get(8).getType(), TokenType.INTEGER);
         Assert.assertSame(tokenList1.get(9).getType(), TokenType.BOOL_OPERATOR);
         Assert.assertSame(tokenList1.get(10).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(11).getType(), TokenType.SEPARATOR);
+        Assert.assertSame(tokenList1.get(11).getType(), TokenType.SEMICOLON);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(1).getType(), TokenType.IDENTIFIER); // a
         Assert.assertSame(tokenList4.get(2).getType(), TokenType.ASSIGN);// =
         Assert.assertSame(tokenList4.get(3).getType(), TokenType.INTEGER);// 1
-        Assert.assertSame(tokenList4.get(4).getType(), TokenType.SEPARATOR);//;
+        Assert.assertSame(tokenList4.get(4).getType(), TokenType.SEMICOLON);//;
         Assert.assertSame(tokenList4.get(5).getType(), TokenType.IF);// if
         Assert.assertSame(tokenList4.get(6).getType(), TokenType.LEFT_BRACKET);// (
         Assert.assertSame(tokenList4.get(7).getType(), TokenType.IDENTIFIER);// a
@@ -195,6 +195,37 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(20).getType(), TokenType.ELSE);//else
         Assert.assertSame(tokenList4.get(21).getType(), TokenType.BIG_LEFT_BRACKET);//{
         Assert.assertSame(tokenList4.get(22).getType(), TokenType.BIG_RIGHT_BRACKET);//{
+    }
+
+
+    @Test
+    public void blockComment(){
+        List<Token> tokenList4 = Lexer.parse("var a=1;/*var b=2;\nvar c=3;*/var d=4;");
+        Assert.assertSame(tokenList4.get(0).getType(), TokenType.VAR); // var
+        Assert.assertSame(tokenList4.get(1).getType(), TokenType.IDENTIFIER); // a
+        Assert.assertSame(tokenList4.get(2).getType(), TokenType.ASSIGN);// =
+        Assert.assertSame(tokenList4.get(3).getType(), TokenType.INTEGER);// 1
+        Assert.assertSame(tokenList4.get(4).getType(), TokenType.SEMICOLON);//;
+        Assert.assertSame(tokenList4.get(5).getType(), TokenType.VAR); // var
+        Assert.assertSame(tokenList4.get(6).getType(), TokenType.IDENTIFIER); // d
+        Assert.assertSame(tokenList4.get(7).getType(), TokenType.ASSIGN);// =
+        Assert.assertSame(tokenList4.get(8).getType(), TokenType.INTEGER);// 4
+        Assert.assertSame(tokenList4.get(9).getType(), TokenType.SEMICOLON);//;
+    }
+
+    @Test
+    public void oneLineComment() {
+        List<Token> tokenList4 = Lexer.parse("var a=1;//var b=2;var c=3;\nvar d=4;");
+        Assert.assertSame(tokenList4.get(0).getType(), TokenType.VAR); // var
+        Assert.assertSame(tokenList4.get(1).getType(), TokenType.IDENTIFIER); // a
+        Assert.assertSame(tokenList4.get(2).getType(), TokenType.ASSIGN);// =
+        Assert.assertSame(tokenList4.get(3).getType(), TokenType.INTEGER);// 1
+        Assert.assertSame(tokenList4.get(4).getType(), TokenType.SEMICOLON);//;
+        Assert.assertSame(tokenList4.get(5).getType(), TokenType.VAR); // var
+        Assert.assertSame(tokenList4.get(6).getType(), TokenType.IDENTIFIER); // d
+        Assert.assertSame(tokenList4.get(7).getType(), TokenType.ASSIGN);// =
+        Assert.assertSame(tokenList4.get(8).getType(), TokenType.INTEGER);// 4
+        Assert.assertSame(tokenList4.get(9).getType(), TokenType.SEMICOLON);//;
     }
 
 

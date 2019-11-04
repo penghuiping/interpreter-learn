@@ -1,4 +1,4 @@
-package com.php25.interpreter.ast;
+package com.php25.interpreter;
 
 /**
  * @author penghuiping

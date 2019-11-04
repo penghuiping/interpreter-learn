@@ -82,15 +82,32 @@ public class Lexer {
                     result.add(token);
                     ++i;
                 } else if (cv == '*') {
-                    col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.MUL, new Position(row, col));
-                    result.add(token);
-                    ++i;
+                    if (line.charAt(i + 1) == '/') {
+                        Token token = new Token("*/", TokenType.RIGHT_BLOCK_COMMENT, new Position(row, col));
+                        result.add(token);
+                        i = i + 2;
+                    } else {
+                        col = i;
+                        Token token = new Token(Character.toString(cv), TokenType.MUL, new Position(row, col));
+                        result.add(token);
+                        ++i;
+                    }
                 } else if (cv == '/') {
                     col = i;
-                    Token token = new Token(Character.toString(cv), TokenType.DIV, new Position(row, col));
-                    result.add(token);
-                    ++i;
+                    if (line.charAt(i + 1) == '*') {
+                        Token token = new Token("/*", TokenType.LEFT_BLOCK_COMMENT, new Position(row, col));
+                        result.add(token);
+                        i = i + 2;
+                    } else if (line.charAt(i + 1) == '/') {
+                        break;
+//                        Token token = new Token("//", TokenType.ONE_LINE_COMMENT, new Position(row, col));
+//                        result.add(token);
+//                        i = i + 2;
+                    } else {
+                        Token token = new Token(Character.toString(cv), TokenType.DIV, new Position(row, col));
+                        result.add(token);
+                        ++i;
+                    }
                 } else if (cv == '%') {
                     col = i;
                     Token token = new Token(Character.toString(cv), TokenType.MOD, new Position(row, col));
@@ -190,6 +207,8 @@ public class Lexer {
                     //关键字处理
                     else if ("var".equals(tokenValue.toString())) {
                         token.setType(TokenType.VAR);
+                    } else if ("let".equals(tokenValue.toString())) {
+                        token.setType(TokenType.LET);
                     } else if ("if".equals(tokenValue.toString())) {
                         token.setType(TokenType.IF);
                     } else if ("else".equals(tokenValue.toString())) {
@@ -208,8 +227,28 @@ public class Lexer {
                 }
             }
         }
-        return result;
+        return removeComment(result);
     }
+
+    private static List<Token> removeComment(List<Token> tokens) {
+        List<Token> newTokens = new ArrayList<>();
+        for (int i = 0; i < tokens.size(); ) {
+            Token token = tokens.get(i);
+            if (Tokens.isLeftBlockComment(token)) {
+                for (int j = i + 1; j < tokens.size(); j++) {
+                    if (Tokens.isRightBlockComment(tokens.get(j))) {
+                        i = j + 1;
+                        break;
+                    }
+                }
+            } else {
+                newTokens.add(token);
+                i++;
+            }
+        }
+        return newTokens;
+    }
+
 
     /**
      * 获取文本中的数字

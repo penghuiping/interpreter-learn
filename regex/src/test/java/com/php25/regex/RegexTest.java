@@ -3,6 +3,7 @@ package com.php25.regex;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -12,11 +13,13 @@ import java.util.List;
 @Slf4j
 public class RegexTest {
 
-    private String letter = "a|b|c|d|e|f|g|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+    private String letter = "(a|b|c|d|e|f|g|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)";
+
+    private String digit = "(0|1|2|3|4|5|6|7|8|9)";
 
     @Test
     public void test() {
-        String expr = "(0|1|2|3|4|5|6|7|8|9)*";
+        String expr = digit+"*";
         List<Token> tokenList = Lexer.parse(expr);
         System.out.println();
         Parser parser = new Parser(tokenList);
@@ -32,7 +35,7 @@ public class RegexTest {
 
     @Test
     public void testXml() {
-        String expr = "(<(" + letter + ")*>)|"+"(</(" + letter + ")*>)";
+        String expr = "(<" + letter + "*>)|"+"(</" + letter + "*>)";
         List<Token> tokenList = Lexer.parse(expr);
         System.out.println();
         Parser parser = new Parser(tokenList);

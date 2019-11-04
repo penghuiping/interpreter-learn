@@ -1,8 +1,6 @@
 package com.php25.interpreter;
 
-import com.php25.interpreter.ast.AST;
-import com.php25.interpreter.ast.ASTParser;
-import com.php25.interpreter.ast.Asts;
+import com.php25.interpreter.syntax.SyntaxParser;
 import com.php25.interpreter.engine.GlobalMemory;
 import com.php25.interpreter.lexer.Lexer;
 import com.php25.interpreter.lexer.Token;
@@ -19,9 +17,9 @@ public class InterpreterTest {
 
     @Test
     public void sample0Test() {
-        String value = "(3*3/3+3-3)%3";
+        String value = "var a= (3*3/3+3-3)%3";
         List<Token> tokens = Lexer.parse(value);
-        ASTParser newParser = new ASTParser(tokens);
+        SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
         Asts.middleOrderTraversalTree(ast, token -> {
             System.out.print(token.getValue());
@@ -38,7 +36,7 @@ public class InterpreterTest {
         String value = "3*(-3)*(-3)*3";
         List<Token> tokens = Lexer.parse(value);
 
-        ASTParser newParser = new ASTParser(tokens);
+        SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
         Asts.middleOrderTraversalTree(ast, token -> {
             System.out.print(token.getValue());
@@ -62,7 +60,7 @@ public class InterpreterTest {
                 "}";
         List<Token> tokens = Lexer.parse(value);
 
-        ASTParser newParser = new ASTParser(tokens);
+        SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
 //        Asts.middleOrderTraversalTree(ast, token -> {
 //            System.out.print(token.getValue());
