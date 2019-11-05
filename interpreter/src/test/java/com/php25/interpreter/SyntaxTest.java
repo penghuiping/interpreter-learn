@@ -47,8 +47,28 @@ public class SyntaxTest {
         String value1 = "var a=1+b/(--b);\n";
         String value2 = "let a=1+b-(--b);\n";
 
-        String value4 = value0+value1+value2;
+        String value4 = value0 + value1 + value2;
         List<Token> tokens = Lexer.parse(value4);
+        SyntaxParser newParser = new SyntaxParser(tokens);
+        AST ast = newParser.parse();
+        System.out.println();
+    }
+
+    @Test
+    public void test5() {
+        String value0 = "function print(){ a=1;};";
+        List<Token> tokens = Lexer.parse(value0);
+        SyntaxParser newParser = new SyntaxParser(tokens);
+        AST ast = newParser.parse();
+        System.out.println();
+    }
+
+    @Test
+    public void test6() {
+        String value0 = "function print(){ a=1;};";
+        String value1 = "a=+-+---b;\n";
+        String value2 = value0 + value1;
+        List<Token> tokens = Lexer.parse(value2);
         SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
         System.out.println();

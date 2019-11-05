@@ -221,13 +221,19 @@ public class Lexer {
                         token.setType(TokenType.BREAK);
                     } else if ("continue".equals(tokenValue.toString())) {
                         token.setType(TokenType.CONTINUE);
+                    } else if ("return".equals(tokenValue.toString())) {
+                        token.setType(TokenType.RETURN);
+                    } else if ("function".equals(tokenValue.toString())) {
+                        token.setType(TokenType.FUNCTION);
                     }
                     result.add(token);
                     i = i + tokenValue.length();
                 }
             }
         }
-        return removeComment(result);
+        result = removeComment(result);
+        result.add(new Token("eof", TokenType.EOF, null));
+        return result;
     }
 
     private static List<Token> removeComment(List<Token> tokens) {

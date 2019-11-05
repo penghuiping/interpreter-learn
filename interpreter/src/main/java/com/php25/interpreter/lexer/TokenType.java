@@ -24,9 +24,9 @@ public enum TokenType {
 
 
     /**
-     * 关键字  if,else,for,while,var,break,continue
+     * 关键字  if,else,for,while,var,break,continue,let,return,function
      */
-    IF,ELSE,FOR,WHILE,VAR,BREAK,CONTINUE,LET,
+    IF,ELSE,FOR,WHILE,VAR,BREAK,CONTINUE,LET,RETURN,FUNCTION,
 
     /**
      * 赋值 =
@@ -51,7 +51,7 @@ public enum TokenType {
     /**
      * 分隔符  ,;,\n
      */
-    SEPARATOR,SEMICOLON,COMMA,
+    SEPARATOR,SEMICOLON,COMMA,EOF,
 
     /**
      * "\/*,*\/,//"

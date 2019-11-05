@@ -111,4 +111,15 @@ public class Tokens {
         return token.getType() == TokenType.ASSIGN;
     }
 
+    public static boolean isReturn(Token token) {
+        return token.getType() == TokenType.RETURN;
+    }
+
+    public static boolean isFunction(Token token) {
+        return token.getType() == TokenType.FUNCTION;
+    }
+
+    public static boolean isEOF(Token token) {
+        return token.getType() == TokenType.EOF;
+    }
 }

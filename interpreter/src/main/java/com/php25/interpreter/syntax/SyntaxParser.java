@@ -9,6 +9,10 @@ import com.php25.interpreter.syntax.node.AssignStatement;
 import com.php25.interpreter.syntax.node.Expr;
 import com.php25.interpreter.syntax.node.Factor;
 import com.php25.interpreter.syntax.node.Factor0;
+import com.php25.interpreter.syntax.node.FunctionBody;
+import com.php25.interpreter.syntax.node.FunctionDeclare;
+import com.php25.interpreter.syntax.node.FunctionName;
+import com.php25.interpreter.syntax.node.FunctionParams;
 import com.php25.interpreter.syntax.node.Program;
 import com.php25.interpreter.syntax.node.StatementList;
 import com.php25.interpreter.syntax.node.Term;
@@ -132,6 +136,99 @@ public class SyntaxParser {
     }
 
     /**
+     * function_body -> {statement_list (return variable)?}
+     *
+     * @return
+     */
+    public AST functionBody() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isBigLeftBracket(token)) {
+            this.eat(TokenType.BIG_LEFT_BRACKET);
+            node = this.statementList();
+            Token token1 = getCurrentToken();
+            if (Tokens.isReturn(token1)) {
+                this.eat(TokenType.RETURN);
+                AST returnValue = this.variable();
+                this.eat(TokenType.BIG_RIGHT_BRACKET);
+                node = new FunctionBody(node, returnValue);
+                return node;
+            } else {
+                this.eat(TokenType.BIG_RIGHT_BRACKET);
+                node = new FunctionBody(node, null);
+                return node;
+            }
+        }
+        return node;
+    }
+
+    /**
+     * function_declare-> function_name function_params function_body
+     *
+     * @return
+     */
+    public AST functionDeclare() {
+        AST functionName = this.functionName();
+        AST functionParams = this.functionParams();
+        AST functionBody = this.functionBody();
+        if (functionName != null && functionParams != null && functionBody != null) {
+            return new FunctionDeclare(functionName, functionParams, functionBody);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * function_name -> function variable
+     *
+     * @return
+     */
+    public AST functionName() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isFunction(token)) {
+            this.eat(TokenType.FUNCTION);
+            node = new FunctionName(this.variable());
+        }
+        return node;
+    }
+
+    /**
+     * function_params -> LeftParenthesis variable? (,variable)* RightParenthesis
+     *
+     * @return
+     */
+    public AST functionParams() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isLeftBracket(token)) {
+            this.eat(TokenType.LEFT_BRACKET);
+            node = this.variable();
+            if (null != node) {
+                List<AST> variables = new ArrayList<>();
+                variables.add(node);
+                token = getCurrentToken();
+                while (Tokens.isComma(token)) {
+                    this.eat(TokenType.COMMA);
+                    node = this.variable();
+                    if (null != node) {
+                        variables.add(node);
+                    } else {
+                        error();
+                    }
+                    token = getCurrentToken();
+                }
+                this.eat(TokenType.RIGHT_BRACKET);
+                node = new FunctionParams(variables);
+            } else {
+                this.eat(TokenType.RIGHT_BRACKET);
+                node = new FunctionParams(null);
+            }
+        }
+        return node;
+    }
+
+    /**
      * program  -> statement_list
      *
      * @return
@@ -145,29 +242,54 @@ public class SyntaxParser {
     }
 
     /**
-     * statement_list->(assign_statement SEMI)+
+     * statement_list->((assign_statement|function_invoke|function_declare) SEMI)+
      */
     public AST statementList() {
-        AST node = this.assignStatement();
+        AST node = null;
 
-        List<AST> list = new ArrayList<>();
-        StatementList resultNode = new StatementList(list);
-        list.add(node);
+        //尝试assign_statement
+        node = this.assignStatement();
 
-        Token token = getCurrentToken();
-        while (Tokens.isSemicolon(token)) {
-            this.eat(TokenType.SEMICOLON);
-            node = this.assignStatement();
-            if (null == node) {
-                //不存在就跳出循环
-                break;
-            } else {
-                //存在，加入statement 并且继续判断
-                list.add(node);
-                token = getCurrentToken();
-            }
+        if (node == null) {
+            //尝试function_declare
+            node = this.functionDeclare();
         }
-        return resultNode;
+
+        if (null != node) {
+            //存在，加入statement 并且继续判断
+            List<AST> list = new ArrayList<>();
+            StatementList resultNode = new StatementList(list);
+            list.add(node);
+
+            Token token = getCurrentToken();
+            while (Tokens.isSemicolon(token)) {
+                this.eat(TokenType.SEMICOLON);
+
+                //尝试assign_statement
+                node = this.assignStatement();
+                if (null != node) {
+                    //存在，加入statement 并且继续判断
+                    list.add(node);
+                    token = getCurrentToken();
+                    continue;
+                }
+
+                //尝试function_declare
+                node = this.functionDeclare();
+                if (null != node) {
+                    //存在，加入statement 并且继续判断
+                    list.add(node);
+                    token = getCurrentToken();
+                    continue;
+                }
+
+                if (node == null) {
+                    break;
+                }
+            }
+            return resultNode;
+        }
+        return node;
     }
 
 
@@ -219,7 +341,7 @@ public class SyntaxParser {
         } else {
             node = this.factor();
             if (null != node) {
-               return node;
+                return node;
             }
         }
         return node;
@@ -276,7 +398,12 @@ public class SyntaxParser {
     }
 
     public AST parse() {
-        return this.program();
+        AST ast = this.program();
+        Token token = getCurrentToken();
+        if (!Tokens.isEOF(token)) {
+            error();
+        }
+        return ast;
     }
 
 
