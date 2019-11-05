@@ -3,7 +3,6 @@ package com.php25.interpreter;
 import com.php25.exception.Exceptions;
 import com.php25.interpreter.lexer.Token;
 import com.php25.interpreter.syntax.node.AssignStatement;
-import com.php25.interpreter.syntax.node.CompoundStatement;
 import com.php25.interpreter.syntax.node.Expr;
 import com.php25.interpreter.syntax.node.Factor;
 import com.php25.interpreter.syntax.node.Factor0;
@@ -28,9 +27,7 @@ public class Asts {
     public static void middleOrderTraversalTree(AST binaryTreeNode, Consumer<Token> consumer) {
         if (binaryTreeNode instanceof AssignStatement) {
             AssignStatement assignStatement = (AssignStatement) binaryTreeNode;
-            middleOrderTraversalTree(assignStatement.getVariable(),consumer);
-        } else if (binaryTreeNode instanceof CompoundStatement) {
-
+            middleOrderTraversalTree(assignStatement.getVariable(), consumer);
         } else if (binaryTreeNode instanceof Expr) {
             Expr binOp = (Expr) binaryTreeNode;
             AST left = binOp.getLeftTerm();

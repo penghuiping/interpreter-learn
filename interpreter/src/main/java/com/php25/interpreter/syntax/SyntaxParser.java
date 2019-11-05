@@ -35,7 +35,7 @@ public class SyntaxParser {
 
 
     /**
-     * assign_statement->variable assign expr
+     * assign_statement->(variable|variable_declare) assign expr
      */
     public AST assignStatement() {
         AST node = null;
@@ -45,8 +45,20 @@ public class SyntaxParser {
             if (Tokens.isAssign(token)) {
                 this.eat(TokenType.ASSIGN);
                 node = new AssignStatement(node, token, this.expr());
+                return node;
             }
         }
+
+        node = this.variable();
+        if (null != node) {
+            Token token = getCurrentToken();
+            if (Tokens.isAssign(token)) {
+                this.eat(TokenType.ASSIGN);
+                node = new AssignStatement(node, token, this.expr());
+                return node;
+            }
+        }
+
         return node;
     }
 
@@ -160,10 +172,10 @@ public class SyntaxParser {
 
 
     /**
-     * term : factor ((MUL | DIV | MOD) factor)*
+     * term : unary_factor ((MUL | DIV | MOD) unary_factor)*
      */
     public AST term() {
-        AST node = this.factor();
+        AST node = this.unaryFactor();
         Token token = getCurrentToken();
 
         //注意这里是用while 应为((MUL | DIV) factor)*表没有或者多个
@@ -178,15 +190,14 @@ public class SyntaxParser {
             } else {
                 this.eat(TokenType.DIV);
             }
-            node = new Term(node, token, this.factor());
+            node = new Term(node, token, this.unaryFactor());
             token = getCurrentToken();
         }
-
         return node;
     }
 
     /**
-     * unary_factor-> (PLUS | MINUS) factor
+     * unary_factor -> ((PLUS | MINUS) unary_factor) | factor
      *
      * @return
      */
@@ -199,7 +210,17 @@ public class SyntaxParser {
             } else {
                 this.eat(TokenType.MINUS);
             }
-            node = new UnaryFactor(token, this.factor());
+
+            node = this.unaryFactor();
+            if (null != node) {
+                node = new UnaryFactor(token, node);
+                return node;
+            }
+        } else {
+            node = this.factor();
+            if (null != node) {
+               return node;
+            }
         }
         return node;
     }

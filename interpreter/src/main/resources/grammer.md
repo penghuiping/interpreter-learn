@@ -13,7 +13,7 @@
 ```
 factor0               -> integer|string
 factor                -> factor0 | variable| LeftParenthesis expr RightParenthesis
-unary_factor          -> (PLUS | MINUS) factor 
+unary_factor          -> ((PLUS | MINUS) unary_factor) | factor
 term                  -> unary_factor ((MUL | DIV | MOD) unary_factor)*
 expr                  -> term ((PLUS | MINUS) term)*
 
@@ -24,10 +24,9 @@ function_name         -> function variable
 function_params       -> LeftParenthesis variable (,variable)* RightParenthesis
 function_body         -> {statement_list (return variable)?}
 function              -> funtion_name function_params function_body
-
 function_invoke       -> variable function_params 
                 
-assign_statement      -> variable_declare assign (expr|function_invoke)
+assign_statement      -> (variable_declare|variable) assign (expr|function_invoke)
 statement_list        -> ((assign_statement|function_invoke) SEMI)+ 
 program               -> statement_list
 

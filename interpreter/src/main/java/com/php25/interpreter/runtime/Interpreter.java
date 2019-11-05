@@ -6,7 +6,6 @@ import com.php25.interpreter.engine.GlobalMemory;
 import com.php25.interpreter.lexer.Token;
 import com.php25.interpreter.lexer.Tokens;
 import com.php25.interpreter.syntax.node.AssignStatement;
-import com.php25.interpreter.syntax.node.CompoundStatement;
 import com.php25.interpreter.syntax.node.Expr;
 import com.php25.interpreter.syntax.node.Factor0;
 import com.php25.interpreter.syntax.node.StatementList;
@@ -31,8 +30,6 @@ public class Interpreter {
             return visitUnaryOp(ast);
         } else if (ast instanceof AssignStatement) {
             return visitAssignStatement(ast);
-        } else if (ast instanceof CompoundStatement) {
-            return visitCompoundStatement(ast);
         } else if (ast instanceof StatementList) {
             return visitStatementList(ast);
         } else if (ast instanceof VariableDeclare) {
@@ -56,14 +53,6 @@ public class Interpreter {
         AST left = binOp.getLeftTerm();
         AST right = binOp.getRightTerm();
         return Core.express(binOp.getOp().getValue(), (Integer) visit(left), (Integer) visit(right));
-    }
-
-
-    private GlobalMemory visitCompoundStatement(AST ast) {
-        CompoundStatement compoundStatement = (CompoundStatement) ast;
-        AST statementList = compoundStatement.getStatementList();
-        visit(statementList);
-        return GlobalMemory.getInstance();
     }
 
 
