@@ -1,4 +1,4 @@
-package com.php25.interpreter.runtime;
+package com.php25.interpreter.interpreter;
 
 import com.php25.exception.Exceptions;
 

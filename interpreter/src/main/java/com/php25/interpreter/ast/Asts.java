@@ -1,14 +1,7 @@
-package com.php25.interpreter;
+package com.php25.interpreter.ast;
 
 import com.php25.exception.Exceptions;
 import com.php25.interpreter.lexer.Token;
-import com.php25.interpreter.syntax.node.AssignStatement;
-import com.php25.interpreter.syntax.node.Expr;
-import com.php25.interpreter.syntax.node.Factor;
-import com.php25.interpreter.syntax.node.Factor0;
-import com.php25.interpreter.syntax.node.StatementList;
-import com.php25.interpreter.syntax.node.Term;
-import com.php25.interpreter.syntax.node.UnaryFactor;
 
 import java.util.function.Consumer;
 

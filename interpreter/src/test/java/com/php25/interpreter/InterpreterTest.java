@@ -1,10 +1,12 @@
 package com.php25.interpreter;
 
+import com.php25.interpreter.ast.AST;
+import com.php25.interpreter.ast.Asts;
 import com.php25.interpreter.syntax.SyntaxParser;
 import com.php25.interpreter.engine.GlobalMemory;
 import com.php25.interpreter.lexer.Lexer;
 import com.php25.interpreter.lexer.Token;
-import com.php25.interpreter.runtime.Interpreter;
+import com.php25.interpreter.interpreter.Interpreter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;

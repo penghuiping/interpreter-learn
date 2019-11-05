@@ -1,24 +1,25 @@
 package com.php25.interpreter.syntax;
 
 import com.php25.exception.Exceptions;
-import com.php25.interpreter.AST;
+import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.lexer.Token;
 import com.php25.interpreter.lexer.TokenType;
 import com.php25.interpreter.lexer.Tokens;
-import com.php25.interpreter.syntax.node.AssignStatement;
-import com.php25.interpreter.syntax.node.Expr;
-import com.php25.interpreter.syntax.node.Factor;
-import com.php25.interpreter.syntax.node.Factor0;
-import com.php25.interpreter.syntax.node.FunctionBody;
-import com.php25.interpreter.syntax.node.FunctionDeclare;
-import com.php25.interpreter.syntax.node.FunctionName;
-import com.php25.interpreter.syntax.node.FunctionParams;
-import com.php25.interpreter.syntax.node.Program;
-import com.php25.interpreter.syntax.node.StatementList;
-import com.php25.interpreter.syntax.node.Term;
-import com.php25.interpreter.syntax.node.UnaryFactor;
-import com.php25.interpreter.syntax.node.Variable;
-import com.php25.interpreter.syntax.node.VariableDeclare;
+import com.php25.interpreter.ast.AssignStatement;
+import com.php25.interpreter.ast.Expr;
+import com.php25.interpreter.ast.Factor;
+import com.php25.interpreter.ast.Factor0;
+import com.php25.interpreter.ast.FunctionBody;
+import com.php25.interpreter.ast.FunctionDeclare;
+import com.php25.interpreter.ast.FunctionInvoke;
+import com.php25.interpreter.ast.FunctionName;
+import com.php25.interpreter.ast.FunctionParams;
+import com.php25.interpreter.ast.Program;
+import com.php25.interpreter.ast.StatementList;
+import com.php25.interpreter.ast.Term;
+import com.php25.interpreter.ast.UnaryFactor;
+import com.php25.interpreter.ast.Variable;
+import com.php25.interpreter.ast.VariableDeclare;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class SyntaxParser {
 
 
     /**
-     * assign_statement->(variable|variable_declare) assign expr
+     * assign_statement -> (variable_declare|variable) assign (expr|function_invoke)
      */
     public AST assignStatement() {
         AST node = null;
@@ -53,16 +54,29 @@ public class SyntaxParser {
             }
         }
 
+        //可能需要回溯
+        Integer index = getCurrentIndex();
         node = this.variable();
         if (null != node) {
             Token token = getCurrentToken();
             if (Tokens.isAssign(token)) {
                 this.eat(TokenType.ASSIGN);
-                node = new AssignStatement(node, token, this.expr());
-                return node;
+                AST node1 = this.expr();
+
+                if (node1 == null) {
+                    node1 = this.functionInvoke();
+                }
+
+                if (node1 != null) {
+                    node = new AssignStatement(node, token, node1);
+                    return node;
+                }
+            } else {
+                //进行回溯
+                resetCurrentIndex(index);
+                return null;
             }
         }
-
         return node;
     }
 
@@ -88,6 +102,7 @@ public class SyntaxParser {
         }
         return node;
     }
+
 
     /**
      * factor -> factor0 | variable | LeftParenthesis expr RightParenthesis
@@ -117,6 +132,7 @@ public class SyntaxParser {
         return node;
     }
 
+
     /**
      * factor0  -> integer|string
      *
@@ -134,6 +150,7 @@ public class SyntaxParser {
         }
         return node;
     }
+
 
     /**
      * function_body -> {statement_list (return variable)?}
@@ -169,13 +186,37 @@ public class SyntaxParser {
      */
     public AST functionDeclare() {
         AST functionName = this.functionName();
-        AST functionParams = this.functionParams();
-        AST functionBody = this.functionBody();
-        if (functionName != null && functionParams != null && functionBody != null) {
-            return new FunctionDeclare(functionName, functionParams, functionBody);
-        } else {
+        if (null == functionName) {
             return null;
         }
+
+        AST functionParams = this.functionParams();
+        if (null == functionParams) {
+            return null;
+        }
+
+        AST functionBody = this.functionBody();
+        if (null == functionBody) {
+            return null;
+        }
+        return new FunctionDeclare(functionName, functionParams, functionBody);
+    }
+
+    /**
+     * function_invoke-> variable function_params
+     *
+     * @return
+     */
+    public AST functionInvoke() {
+        AST node = null;
+        node = this.variable();
+        if (node != null) {
+            AST node1 = this.functionParams();
+            if (node1 != null) {
+                return new FunctionInvoke(node, node1);
+            }
+        }
+        return node;
     }
 
     /**
@@ -253,6 +294,11 @@ public class SyntaxParser {
         if (node == null) {
             //尝试function_declare
             node = this.functionDeclare();
+
+            if (node == null) {
+                //尝试function_invoke
+                node = this.functionInvoke();
+            }
         }
 
         if (null != node) {
@@ -283,9 +329,15 @@ public class SyntaxParser {
                     continue;
                 }
 
-                if (node == null) {
-                    break;
+                //尝试function_invoke
+                node = this.functionInvoke();
+                if (null != node) {
+                    //存在，加入statement 并且继续判断
+                    list.add(node);
+                    token = getCurrentToken();
+                    continue;
                 }
+                break;
             }
             return resultNode;
         }
@@ -431,5 +483,13 @@ public class SyntaxParser {
     private Token getCurrentToken() {
         Token token = tokens.get(current);
         return token;
+    }
+
+    private Integer getCurrentIndex() {
+        return current;
+    }
+
+    private void resetCurrentIndex(Integer index) {
+        this.current = index;
     }
 }

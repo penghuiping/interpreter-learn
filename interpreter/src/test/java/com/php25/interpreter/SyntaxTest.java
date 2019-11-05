@@ -1,5 +1,6 @@
 package com.php25.interpreter;
 
+import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.lexer.Lexer;
 import com.php25.interpreter.lexer.Token;
 import com.php25.interpreter.syntax.SyntaxParser;
@@ -69,6 +70,16 @@ public class SyntaxTest {
         String value1 = "a=+-+---b;\n";
         String value2 = value0 + value1;
         List<Token> tokens = Lexer.parse(value2);
+        SyntaxParser newParser = new SyntaxParser(tokens);
+        AST ast = newParser.parse();
+        System.out.println();
+    }
+
+    @Test
+    public void test7() {
+        String value0 = "a=1;\n";
+        String value1 = "print(a);";
+        List<Token> tokens = Lexer.parse(value1 + value0);
         SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
         System.out.println();

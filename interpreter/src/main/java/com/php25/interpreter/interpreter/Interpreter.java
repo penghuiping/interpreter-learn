@@ -1,16 +1,16 @@
-package com.php25.interpreter.runtime;
+package com.php25.interpreter.interpreter;
 
 import com.php25.exception.Exceptions;
-import com.php25.interpreter.AST;
+import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.engine.GlobalMemory;
 import com.php25.interpreter.lexer.Token;
 import com.php25.interpreter.lexer.Tokens;
-import com.php25.interpreter.syntax.node.AssignStatement;
-import com.php25.interpreter.syntax.node.Expr;
-import com.php25.interpreter.syntax.node.Factor0;
-import com.php25.interpreter.syntax.node.StatementList;
-import com.php25.interpreter.syntax.node.UnaryFactor;
-import com.php25.interpreter.syntax.node.VariableDeclare;
+import com.php25.interpreter.ast.AssignStatement;
+import com.php25.interpreter.ast.Expr;
+import com.php25.interpreter.ast.Factor0;
+import com.php25.interpreter.ast.StatementList;
+import com.php25.interpreter.ast.UnaryFactor;
+import com.php25.interpreter.ast.VariableDeclare;
 
 import java.util.List;
 
