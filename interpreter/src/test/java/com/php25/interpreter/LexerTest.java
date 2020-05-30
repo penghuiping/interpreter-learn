@@ -101,40 +101,48 @@ public class LexerTest {
     public void boolOperator() {
         List<Token> tokenList1 = Lexer.parse("11==11");
         Assert.assertSame(tokenList1.get(0).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(1).getType(), TokenType.BOOL_OPERATOR);
-        Assert.assertEquals(tokenList1.get(1).getValue(), "==");
+        Assert.assertSame(tokenList1.get(1).getType(), TokenType.EQ);
         Assert.assertSame(tokenList1.get(2).getType(), TokenType.INTEGER);
 
         List<Token> tokenList2 = Lexer.parse("false&&true");
         Assert.assertSame(tokenList2.get(0).getType(), TokenType.BOOL);
-        Assert.assertSame(tokenList2.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList2.get(1).getType(), TokenType.AND);
         Assert.assertSame(tokenList2.get(2).getType(), TokenType.BOOL);
 
 
         List<Token> tokenList3 = Lexer.parse("false||true");
         Assert.assertSame(tokenList3.get(0).getType(), TokenType.BOOL);
-        Assert.assertSame(tokenList3.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList3.get(1).getType(), TokenType.OR);
         Assert.assertSame(tokenList3.get(2).getType(), TokenType.BOOL);
 
         List<Token> tokenList4 = Lexer.parse("1>2");
         Assert.assertSame(tokenList4.get(0).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList4.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList4.get(1).getType(), TokenType.GT);
         Assert.assertSame(tokenList4.get(2).getType(), TokenType.INTEGER);
 
         List<Token> tokenList5 = Lexer.parse("1>=2");
         Assert.assertSame(tokenList5.get(0).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList5.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList5.get(1).getType(), TokenType.GTE);
         Assert.assertSame(tokenList5.get(2).getType(), TokenType.INTEGER);
 
         List<Token> tokenList6 = Lexer.parse("a<b");
         Assert.assertSame(tokenList6.get(0).getType(), TokenType.IDENTIFIER);
-        Assert.assertSame(tokenList6.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList6.get(1).getType(), TokenType.LT);
         Assert.assertSame(tokenList6.get(2).getType(), TokenType.IDENTIFIER);
 
         List<Token> tokenList7 = Lexer.parse("a<=b");
         Assert.assertSame(tokenList7.get(0).getType(), TokenType.IDENTIFIER);
-        Assert.assertSame(tokenList7.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList7.get(1).getType(), TokenType.LTE);
         Assert.assertSame(tokenList7.get(2).getType(), TokenType.IDENTIFIER);
+
+        List<Token> tokenList8 = Lexer.parse("a!=b");
+        Assert.assertSame(tokenList8.get(0).getType(), TokenType.IDENTIFIER);
+        Assert.assertSame(tokenList8.get(1).getType(), TokenType.NEQ);
+        Assert.assertSame(tokenList8.get(2).getType(), TokenType.IDENTIFIER);
+
+        List<Token> tokenList9 = Lexer.parse("!a");
+        Assert.assertSame(tokenList9.get(0).getType(), TokenType.NOT);
+        Assert.assertSame(tokenList9.get(1).getType(), TokenType.IDENTIFIER);
     }
 
     @Test
@@ -156,15 +164,15 @@ public class LexerTest {
     public void separator() {
         List<Token> tokenList1 = Lexer.parse("  11 ==  11; 22  ==  11   ;\n\n11 ==  11;");
         Assert.assertSame(tokenList1.get(0).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(1).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList1.get(1).getType(), TokenType.EQ);
         Assert.assertSame(tokenList1.get(2).getType(), TokenType.INTEGER);
         Assert.assertSame(tokenList1.get(3).getType(), TokenType.SEMICOLON);
         Assert.assertSame(tokenList1.get(4).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(5).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList1.get(5).getType(), TokenType.EQ);
         Assert.assertSame(tokenList1.get(6).getType(), TokenType.INTEGER);
         Assert.assertSame(tokenList1.get(7).getType(), TokenType.SEMICOLON);
         Assert.assertSame(tokenList1.get(8).getType(), TokenType.INTEGER);
-        Assert.assertSame(tokenList1.get(9).getType(), TokenType.BOOL_OPERATOR);
+        Assert.assertSame(tokenList1.get(9).getType(), TokenType.EQ);
         Assert.assertSame(tokenList1.get(10).getType(), TokenType.INTEGER);
         Assert.assertSame(tokenList1.get(11).getType(), TokenType.SEMICOLON);
     }
@@ -180,7 +188,7 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(5).getType(), TokenType.IF);// if
         Assert.assertSame(tokenList4.get(6).getType(), TokenType.LEFT_BRACKET);// (
         Assert.assertSame(tokenList4.get(7).getType(), TokenType.IDENTIFIER);// a
-        Assert.assertSame(tokenList4.get(8).getType(), TokenType.BOOL_OPERATOR);//>
+        Assert.assertSame(tokenList4.get(8).getType(), TokenType.GT);//>
         Assert.assertSame(tokenList4.get(9).getType(), TokenType.INTEGER);//0
         Assert.assertSame(tokenList4.get(10).getType(), TokenType.RIGHT_BRACKET);//)
         Assert.assertSame(tokenList4.get(11).getType(), TokenType.BIG_LEFT_BRACKET);//{
@@ -189,7 +197,7 @@ public class LexerTest {
         Assert.assertSame(tokenList4.get(14).getType(), TokenType.IF);//if
         Assert.assertSame(tokenList4.get(15).getType(), TokenType.LEFT_BRACKET);//(
         Assert.assertSame(tokenList4.get(16).getType(), TokenType.IDENTIFIER);//a
-        Assert.assertSame(tokenList4.get(17).getType(), TokenType.BOOL_OPERATOR);//==
+        Assert.assertSame(tokenList4.get(17).getType(), TokenType.EQ);//==
         Assert.assertSame(tokenList4.get(18).getType(), TokenType.INTEGER);//0
         Assert.assertSame(tokenList4.get(19).getType(), TokenType.RIGHT_BRACKET);//)
         Assert.assertSame(tokenList4.get(20).getType(), TokenType.ELSE);//else
@@ -199,7 +207,7 @@ public class LexerTest {
 
 
     @Test
-    public void blockComment(){
+    public void blockComment() {
         List<Token> tokenList4 = Lexer.parse("var a=1;/*var b=2;\nvar c=3;*/var d=4;");
         Assert.assertSame(tokenList4.get(0).getType(), TokenType.VAR); // var
         Assert.assertSame(tokenList4.get(1).getType(), TokenType.IDENTIFIER); // a

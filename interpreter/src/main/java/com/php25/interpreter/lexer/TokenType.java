@@ -26,7 +26,7 @@ public enum TokenType {
     /**
      * 关键字  if,else,for,while,var,break,continue,let,return,function
      */
-    IF,ELSE,FOR,WHILE,VAR,BREAK,CONTINUE,LET,RETURN,FUNCTION,
+    IF, ELSE, FOR, WHILE, VAR, BREAK, CONTINUE, LET, RETURN, FUNCTION,
 
     /**
      * 赋值 =
@@ -36,12 +36,12 @@ public enum TokenType {
     /**
      * 大括号 {,}
      */
-    BIG_LEFT_BRACKET,BIG_RIGHT_BRACKET,
+    BIG_LEFT_BRACKET, BIG_RIGHT_BRACKET,
 
     /**
-     * &&,||,==,!=,>,<,>=,<=,
+     * !,&&,||,==,!=,>,<,>=,<=,
      */
-    BOOL_OPERATOR,
+    NOT, AND, OR, EQ, NEQ, GT, LT, GTE, LTE,
 
     /**
      * 标识
@@ -51,11 +51,11 @@ public enum TokenType {
     /**
      * 分隔符  ;,\n
      */
-    SEPARATOR,SEMICOLON,COMMA,EOF,
+    SEPARATOR, SEMICOLON, COMMA, EOF,
 
     /**
      * "\/*,*\/,//"
      */
-    LEFT_BLOCK_COMMENT,RIGHT_BLOCK_COMMENT,ONE_LINE_COMMENT
+    LEFT_BLOCK_COMMENT, RIGHT_BLOCK_COMMENT, ONE_LINE_COMMENT
 
 }

@@ -75,6 +75,33 @@ public class Tokens {
                 || token.getType() == TokenType.MOD);
     }
 
+    public static boolean isCompareOperator(Token token) {
+        return null != token && (
+                token.getType() == TokenType.EQ
+                        || token.getType() == TokenType.NEQ
+                        || token.getType() == TokenType.GT
+                        || token.getType() == TokenType.GTE
+                        || token.getType() == TokenType.LT
+                        || token.getType() == TokenType.LTE
+        );
+    }
+
+    public static boolean isBoolOperator(Token token) {
+        return null != token && (
+                token.getType() == TokenType.AND
+                        || token.getType() == TokenType.OR
+                        || token.getType() == TokenType.NOT
+        );
+    }
+
+    public static boolean isIf(Token token) {
+        return null != token && token.getType() == TokenType.IF;
+    }
+
+    public static boolean isElse(Token token) {
+        return null != token && token.getType() == TokenType.ELSE;
+    }
+
     public static boolean isPlus(Token token) {
         return null != token && token.getType() == TokenType.PLUS;
     }

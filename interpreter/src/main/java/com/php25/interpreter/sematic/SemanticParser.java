@@ -13,4 +13,14 @@ public class SemanticParser {
     }
 
 
+    public void visitAssignStatement() {
+
+    }
+
+    public void visitBasicType() {
+
+    }
+
+
+
 }

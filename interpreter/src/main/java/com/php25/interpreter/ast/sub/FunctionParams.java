@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * function_params -> LeftParenthesis variable? (,variable)* RightParenthesis
+ * function_params -> LeftParenthesis (variable|basic_type)? (,(variable|basic_type))* RightParenthesis
  *
  * @author penghuiping
  * @date 2019/11/5 11:05
@@ -18,5 +18,5 @@ import java.util.List;
 @AllArgsConstructor
 public class FunctionParams extends AST {
 
-    private List<AST> variables;
+    private List<AST> params;
 }

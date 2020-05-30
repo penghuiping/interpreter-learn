@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  * 1. 基本操作符 +,-,*,/,%,
- * 2. bool操作 &&,||,==,!=,>,<,>=,<=,
+ * 2. bool操作 !,&&,||,==,!=,>,<,>=,<=
  * 3. 关键字 if,else,for,while,var,break,continue
  * 4. 小括号: (,)
  * 5. 大括号: {,}
@@ -119,10 +119,10 @@ public class Lexer {
                     String lineTmp = line.substring(i);
 
                     if (cv == '=') {
-                        //先判断 bool运算符
+                        //先判断 bool运算符 !,&&,||,==,!=,>,<,>=,<=,
                         getBoolOperator(tokenValue, lineTmp, row, 0);
                         if (tokenValue.length() > 0) {
-                            Token token = new Token(tokenValue.toString(), TokenType.BOOL_OPERATOR, new Position(row, col));
+                            Token token = new Token(tokenValue.toString(), TokenType.EQ, new Position(row, col));
                             result.add(token);
                             i = i + tokenValue.length();
                         } else {
@@ -136,7 +136,26 @@ public class Lexer {
                     } else {
                         //bool运算符
                         getBoolOperator(tokenValue, lineTmp, row, 0);
-                        Token token = new Token(tokenValue.toString(), TokenType.BOOL_OPERATOR, new Position(row, col));
+                        Token token = null;
+                        if ("!".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.NOT, new Position(row, col));
+                        } else if ("!=".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.NEQ, new Position(row, col));
+                        } else if (">".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.GT, new Position(row, col));
+                        } else if ("<".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.LT, new Position(row, col));
+                        } else if (">=".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.GTE, new Position(row, col));
+                        } else if ("<=".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.LTE, new Position(row, col));
+                        } else if ("&&".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.AND, new Position(row, col));
+                        } else if ("||".equals(tokenValue.toString())) {
+                            token = new Token(tokenValue.toString(), TokenType.OR, new Position(row, col));
+                        } else {
+                            throw Exceptions.throwIllegalStateException(String.format("lexical阶段出错,非法字符名称:%s,位于第%d行,%d列", token, row, col));
+                        }
                         result.add(token);
                         i = i + tokenValue.length();
                     }
@@ -309,16 +328,13 @@ public class Lexer {
             if (Character.isLetter(v) || v == '_' || Character.isDigit(v)) {
                 token.append(v);
                 getIdentifier(token, text, row, ++column);
-            } else if (v == '!' || v == '@' || v == '#' || v == '$' || v == '^' || v == '\\' || v == '.') {
-                token.append(v);
-                throw Exceptions.throwIllegalStateException(String.format("lexical阶段出错,非法字符名称:%s,位于第%d行,%d列", token, row, column));
             }
         }
     }
 
 
     /**
-     * 获取文本中的布尔操作符 &&,||,==,!=,>,<,>=,<=,
+     * 获取文本中的布尔操作符 !,&&,||,==,!=,>,<,>=,<=,
      *
      * @param token
      * @param text
@@ -340,10 +356,10 @@ public class Lexer {
                         }
                     }
                 } else {
-                    //处理bool操作符  >=,<=,!=
+                    //处理bool操作符  >=,<=,!=,!
                     if ((v0 == '>' || v0 == '<' || v0 == '!') && v1 == '=') {
                         token.append(v0).append(v1);
-                    } else if (v0 == '>' || v0 == '<') {
+                    } else if (v0 == '>' || v0 == '<' || v0 == '!') {
                         token.append(v0);
                     } else {
                         throw Exceptions.throwIllegalStateException(String.format("lexical阶段出错,非法操作符:%s,位于第%d行,%d列", token, row, column));

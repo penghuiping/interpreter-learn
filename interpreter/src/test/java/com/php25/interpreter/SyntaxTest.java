@@ -85,8 +85,24 @@ public class SyntaxTest {
     @Test
     public void test7() {
         String value0 = "a=1;";
-        String value1 = "print(a);";
+        String value1 = "print(1);";
         List<Token> tokens = Lexer.parse(value0 + value1);
+        SyntaxParser newParser = new SyntaxParser(tokens);
+        AST ast = newParser.parse();
+        Asts.printAST(ast);
+    }
+
+    @Test
+    public void test8() {
+        String value0 =
+                "if(a>0){" +
+                    "print(\"大于0\");" +
+                "}else if(a==0) {" +
+                    "print(\"等于0\");" +
+                "}else {" +
+                    "print(\"小于0\");" +
+                "}";
+        List<Token> tokens = Lexer.parse(value0 );
         SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
         Asts.printAST(ast);

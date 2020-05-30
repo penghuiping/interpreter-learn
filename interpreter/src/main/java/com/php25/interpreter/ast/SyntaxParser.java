@@ -3,7 +3,9 @@ package com.php25.interpreter.ast;
 import com.php25.exception.Exceptions;
 import com.php25.interpreter.ast.sub.AssignStatement;
 import com.php25.interpreter.ast.sub.BasicType;
+import com.php25.interpreter.ast.sub.BoolExpr;
 import com.php25.interpreter.ast.sub.Expr;
+import com.php25.interpreter.ast.sub.Expr0;
 import com.php25.interpreter.ast.sub.Factor;
 import com.php25.interpreter.ast.sub.FunctionBody;
 import com.php25.interpreter.ast.sub.FunctionDeclare;
@@ -11,7 +13,9 @@ import com.php25.interpreter.ast.sub.FunctionInvoke;
 import com.php25.interpreter.ast.sub.FunctionName;
 import com.php25.interpreter.ast.sub.FunctionParams;
 import com.php25.interpreter.ast.sub.FunctionReturn;
+import com.php25.interpreter.ast.sub.IfStatement;
 import com.php25.interpreter.ast.sub.Program;
+import com.php25.interpreter.ast.sub.StatementBody;
 import com.php25.interpreter.ast.sub.StatementList;
 import com.php25.interpreter.ast.sub.Term;
 import com.php25.interpreter.ast.sub.UnaryFactor;
@@ -29,20 +33,28 @@ import java.util.List;
  * assign_statement -> (variable_declare|variable) assign (expr|function_invoke) SEMI
  * <p>
  * basic_type  -> integer|string
- * factor -> basic_type | variable | LeftParenthesis expr RightParenthesis
+ * factor -> basic_type | variable | LeftParenthesis bool_expr RightParenthesis
  * <p>
  * unary_factor -> (PLUS | MINUS)* factor
  * term : unary_factor ((MUL | DIV | MOD) unary_factor)*
  * expr->term ((PLUS | MINUS) term)*
+ * expr_0->expr ((gt|lt|eq|gte|lte) expr)*
+ * bool_expr->expr_0 ((and | or | not) expr_0)*
+ * <p>
  * <p>
  * function_declare-> function_name function_params function_body
  * function_name -> function variable
- * function_params -> LeftParenthesis (variable (,variable)*)? RightParenthesis
+ * function_params -> LeftParenthesis ((variable|basic_type) (,(variable|basic_type))*)? RightParenthesis
  * function_body -> {statement_list (return variable)?}
  * function_return -> return variable SEMI
  * function_invoke-> variable function_params SEMI
  * <p>
- * statement_list->(assign_statement|function_invoke|function_declare)+
+ * <p>
+ * statement_body-> { statement_list }
+ * if_statement -> (if|(else if)|else) (LeftParenthesis bool_expr RightParenthesis)? statement_body
+ * <p>
+ * <p>
+ * statement_list->(assign_statement|if_statement|function_invoke|function_declare)+
  * program  -> statement_list
  *
  * @author penghuiping
@@ -197,6 +209,7 @@ public class SyntaxParser {
             this.eat();
             node = new BasicType(token);
         }
+
         return node;
     }
 
@@ -222,8 +235,13 @@ public class SyntaxParser {
         if (Tokens.isLeftBracket(token)) {
             this.eat();
             node = this.expr();
-            this.eat();
-            node = new Factor(node);
+            if (node != null) {
+                Token token1 = getCurrentToken();
+                if (Tokens.isRightBracket(token1)) {
+                    node = new Factor(node);
+                    this.eat();
+                }
+            }
         }
         return node;
     }
@@ -306,6 +324,56 @@ public class SyntaxParser {
     }
 
     /**
+     * expr_0->expr ((gt|lt|eq|gte|lte) expr)*
+     *
+     * @return
+     */
+    public AST expr0() {
+        AST node = this.expr();
+        if (null != node) {
+            while (true) {
+                Token token = getCurrentToken();
+                if (Tokens.isCompareOperator(token)) {
+                    this.eat();
+                    AST node1 = this.expr();
+                    if (node1 != null) {
+                        node = new Expr0(node, token, node1);
+                    } else {
+                        error();
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return node;
+    }
+
+    /**
+     * bool_expr->expr_0 ((and | or | not) expr_0)*
+     */
+    public AST boolExpr() {
+        AST node = this.expr0();
+        if (null != node) {
+            while (true) {
+                Token token = getCurrentToken();
+                if (Tokens.isBoolOperator(token)) {
+                    this.eat();
+                    AST node1 = this.expr0();
+                    if (node1 != null) {
+                        node = new BoolExpr(node, token, node1);
+                    } else {
+                        error();
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return node;
+    }
+
+    /**
      * function_declare-> function_name function_params function_body
      *
      * @return
@@ -344,7 +412,7 @@ public class SyntaxParser {
     }
 
     /**
-     * function_params -> LeftParenthesis variable? (,variable)* RightParenthesis
+     * function_params -> LeftParenthesis ((variable|basic_type) (,(variable|basic_type))*)? RightParenthesis
      *
      * @return
      */
@@ -354,6 +422,10 @@ public class SyntaxParser {
         if (Tokens.isLeftBracket(token)) {
             this.eat();
             node = this.variable();
+            if (null == node) {
+                node = this.basicType();
+            }
+
             if (null != node) {
                 List<AST> variables = new ArrayList<>();
                 variables.add(node);
@@ -361,6 +433,10 @@ public class SyntaxParser {
                 while (Tokens.isComma(token)) {
                     this.eat();
                     node = this.variable();
+                    if (null == node) {
+                        node = this.basicType();
+                    }
+
                     if (null != node) {
                         variables.add(node);
                     } else {
@@ -375,7 +451,12 @@ public class SyntaxParser {
                 }
                 node = new FunctionParams(variables);
             } else {
-                this.eat();
+                Token token1 = getCurrentToken();
+                if (Tokens.isRightBracket(token1)) {
+                    this.eat();
+                } else {
+                    error();
+                }
                 node = new FunctionParams(null);
             }
         }
@@ -467,9 +548,101 @@ public class SyntaxParser {
         return node;
     }
 
+    /**
+     * statement_body-> { statement_list }
+     *
+     * @return
+     */
+    public AST statementBody() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isBigLeftBracket(token)) {
+            this.eat();
+            AST node1 = this.statementList();
+            if (node1 != null) {
+                Token token1 = getCurrentToken();
+                if (Tokens.isBigRightBracket(token1)) {
+                    this.eat();
+                    node = new StatementBody(node1);
+                } else {
+                    error();
+                }
+            } else {
+                error();
+            }
+        }
+
+        return node;
+    }
 
     /**
-     * statement_list->(assign_statement|function_invoke|function_declare)+
+     * if_statement -> (if|(else if)|else) (LeftParenthesis bool_expr RightParenthesis)? statement_body
+     *
+     * @return
+     */
+    public AST ifStatement() {
+        AST node = null;
+        Token token = getCurrentToken();
+        if (Tokens.isIf(token)) {
+            this.eat();
+            Token token1 = getCurrentToken();
+            if (Tokens.isLeftBracket(token1)) {
+                this.eat();
+                AST node1 = this.boolExpr();
+                if (null != node1) {
+                    Token token2 = getCurrentToken();
+                    if (Tokens.isRightBracket(token2)) {
+                        this.eat();
+                        AST node2 = this.statementBody();
+                        if (node2 != null) {
+                            node = new IfStatement(token, null, node1, node2);
+                        } else {
+                            error();
+                        }
+                    } else {
+                        error();
+                    }
+                } else {
+                    error();
+                }
+            }
+        } else if (Tokens.isElse(token)) {
+            this.eat();
+            Token token_ = getCurrentToken();
+            if (Tokens.isIf(token_)) {
+                this.eat();
+                AST node1 = this.boolExpr();
+                if (null != node1) {
+                    Token token2 = getCurrentToken();
+                    if (Tokens.isRightBracket(token2)) {
+                        this.eat();
+                        AST node2 = this.statementBody();
+                        if (node2 != null) {
+                            node = new IfStatement(token, token_, node1, node2);
+                        } else {
+                            error();
+                        }
+                    } else {
+                        error();
+                    }
+                } else {
+                    error();
+                }
+            } else {
+                AST node2 = this.statementBody();
+                if (node2 != null) {
+                    node = new IfStatement(token, null, null, node2);
+                } else {
+                    error();
+                }
+            }
+        }
+
+        return node;
+    }
+
+    /**
+     * statement_list->(assign_statement|if_statement|function_invoke|function_declare)+
      */
     public AST statementList() {
         AST node = null;
@@ -479,6 +652,13 @@ public class SyntaxParser {
         while (true) {
             //尝试assign_statement
             node = this.assignStatement();
+            if (null != node) {
+                //存在，加入statement 并且继续判断
+                list.add(node);
+                continue;
+            }
+
+            node = this.ifStatement();
             if (null != node) {
                 //存在，加入statement 并且继续判断
                 list.add(node);
