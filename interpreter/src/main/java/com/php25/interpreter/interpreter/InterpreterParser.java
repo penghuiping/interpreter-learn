@@ -5,12 +5,12 @@ import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.engine.GlobalMemory;
 import com.php25.interpreter.lexer.Token;
 import com.php25.interpreter.lexer.Tokens;
-import com.php25.interpreter.ast.AssignStatement;
-import com.php25.interpreter.ast.Expr;
-import com.php25.interpreter.ast.Factor0;
-import com.php25.interpreter.ast.StatementList;
-import com.php25.interpreter.ast.UnaryFactor;
-import com.php25.interpreter.ast.VariableDeclare;
+import com.php25.interpreter.ast.sub.AssignStatement;
+import com.php25.interpreter.ast.sub.Expr;
+import com.php25.interpreter.ast.sub.BasicType;
+import com.php25.interpreter.ast.sub.StatementList;
+import com.php25.interpreter.ast.sub.UnaryFactor;
+import com.php25.interpreter.ast.sub.VariableDeclare;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ import java.util.List;
  * @author penghuiping
  * @date 2019/10/16 10:45
  */
-public class Interpreter {
+public class InterpreterParser {
 
 
     public Object visit(AST ast) {
         if (ast instanceof Expr) {
             return visitBinOp(ast);
-        } else if (ast instanceof Factor0) {
+        } else if (ast instanceof BasicType) {
             return visitDigit(ast);
         } else if (ast instanceof UnaryFactor) {
             return visitUnaryOp(ast);
@@ -33,7 +33,7 @@ public class Interpreter {
         } else if (ast instanceof StatementList) {
             return visitStatementList(ast);
         } else if (ast instanceof VariableDeclare) {
-            return visitVar(ast);
+            return visitVarDeclare(ast);
         } else {
             throw Exceptions.throwIllegalStateException("不支持此类型的AST");
         }
@@ -57,7 +57,7 @@ public class Interpreter {
 
 
     private Integer visitDigit(AST ast) {
-        Factor0 digit = (Factor0) ast;
+        BasicType digit = (BasicType) ast;
         return Integer.parseInt(digit.getToken().getValue());
     }
 
@@ -75,19 +75,23 @@ public class Interpreter {
         UnaryFactor unaryOp = (UnaryFactor) ast;
         AST next = unaryOp.getFactor();
         Integer value = (Integer) visit(next);
-        Token op = unaryOp.getMinusOrPlus();
+        List<Token> ops = unaryOp.getMinusOrPlus();
 
-        if (Tokens.isMinus(op)) {
-            return -value;
-        } else {
-            return value;
+        for (int i = ops.size() - 1; i >= 0; i--) {
+            Token op = ops.get(i);
+            if (Tokens.isMinus(op)) {
+                value = -value;
+            } else {
+                value = +value;
+            }
         }
+        return value;
     }
 
 
-    private String visitVar(AST ast) {
+    private String visitVarDeclare(AST ast) {
         VariableDeclare var = (VariableDeclare) ast;
-        return var.getIdentifiers().get(0).getValue();
+        return var.getVariables().get(0).getIdentifier().getValue();
     }
 
 

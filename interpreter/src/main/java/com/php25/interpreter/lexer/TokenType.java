@@ -49,7 +49,7 @@ public enum TokenType {
     IDENTIFIER,
 
     /**
-     * 分隔符  ,;,\n
+     * 分隔符  ;,\n
      */
     SEPARATOR,SEMICOLON,COMMA,EOF,
 

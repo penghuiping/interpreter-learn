@@ -1,4 +1,4 @@
-package com.php25.interpreter.ast;
+package com.php25.interpreter.ast.sub;
 
 import com.php25.interpreter.ast.AST;
 import lombok.AllArgsConstructor;
@@ -6,14 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * function_name -> function variable
+ * function_invoke -> variable function_params
+ *
  * @author penghuiping
- * @date 2019/11/5 11:02
+ * @date 2019/11/5 15:13
  */
 @Setter
 @Getter
 @AllArgsConstructor
-public class FunctionName extends AST {
+public class FunctionInvoke extends AST {
 
     private AST variable;
+
+    private AST functionParams;
+
 }

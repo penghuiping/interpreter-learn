@@ -2,11 +2,11 @@ package com.php25.interpreter;
 
 import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.ast.Asts;
-import com.php25.interpreter.syntax.SyntaxParser;
+import com.php25.interpreter.ast.SyntaxParser;
 import com.php25.interpreter.engine.GlobalMemory;
 import com.php25.interpreter.lexer.Lexer;
 import com.php25.interpreter.lexer.Token;
-import com.php25.interpreter.interpreter.Interpreter;
+import com.php25.interpreter.interpreter.InterpreterParser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,11 +23,9 @@ public class InterpreterTest {
         List<Token> tokens = Lexer.parse(value);
         SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
-        Asts.middleOrderTraversalTree(ast, token -> {
-            System.out.print(token.getValue());
-        });
+
         System.out.println();
-        Interpreter interpreter = new Interpreter();
+        InterpreterParser interpreter = new InterpreterParser();
         Object result = interpreter.visit(ast);
         Assert.assertSame(result, 0);
     }
@@ -40,11 +38,8 @@ public class InterpreterTest {
 
         SyntaxParser newParser = new SyntaxParser(tokens);
         AST ast = newParser.parse();
-        Asts.middleOrderTraversalTree(ast, token -> {
-            System.out.print(token.getValue());
-        });
         System.out.println();
-        Interpreter interpreter = new Interpreter();
+        InterpreterParser interpreter = new InterpreterParser();
         Object result = interpreter.visit(ast);
         Assert.assertSame(result, 81);
     }
@@ -68,7 +63,7 @@ public class InterpreterTest {
 //            System.out.print(token.getValue());
 //        });
         System.out.println();
-        Interpreter interpreter = new Interpreter();
+        InterpreterParser interpreter = new InterpreterParser();
         interpreter.visit(ast);
         log.info("内存中内容为:\n{}", GlobalMemory.getPrintContent());
     }

@@ -186,7 +186,7 @@ public class Lexer {
                         case ',': {
                             //分隔符-逗号
                             col = i;
-                            Token token = new Token(Character.toString(cv), TokenType.SEPARATOR, new Position(row, col));
+                            Token token = new Token(Character.toString(cv), TokenType.COMMA, new Position(row, col));
                             result.add(token);
                             ++i;
                             break;

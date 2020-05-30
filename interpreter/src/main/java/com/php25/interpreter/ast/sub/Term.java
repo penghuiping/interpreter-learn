@@ -1,4 +1,4 @@
-package com.php25.interpreter.ast;
+package com.php25.interpreter.ast.sub;
 
 import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.lexer.Token;
@@ -7,19 +7,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * expr                  -> term ((PLUS | MINUS) term)*
+ * term -> unary_factor ((MUL | DIV | MOD) unary_factor)*
  *
  * @author penghuiping
- * @date 2019/10/16 09:29
+ * @date 2019/11/4 15:51
  */
 @Getter
 @Setter
 @AllArgsConstructor
-public class Expr extends AST {
+public class Term extends AST {
 
-    private AST leftTerm;
+    private AST leftUnaryFactor;
 
     private Token op;
 
-    private AST rightTerm;
+    private AST rightUnaryFactor;
 }

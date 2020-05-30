@@ -1,4 +1,4 @@
-package com.php25.interpreter.ast;
+package com.php25.interpreter.ast.sub;
 
 import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.lexer.Token;

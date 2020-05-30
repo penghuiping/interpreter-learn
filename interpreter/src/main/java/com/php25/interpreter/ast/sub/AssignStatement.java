@@ -1,4 +1,4 @@
-package com.php25.interpreter.ast;
+package com.php25.interpreter.ast.sub;
 
 import com.php25.interpreter.ast.AST;
 import com.php25.interpreter.lexer.Token;
@@ -9,7 +9,7 @@ import lombok.Setter;
 /**
  * 赋值操作节点
  *
- * assign_statement      -> variable assign expr
+ * assign_statement-> variable assign expr
  *
  * @author penghuiping
  * @date 2019/10/17 11:29
